@@ -22,12 +22,17 @@ export default function TableOfContent() {
           <ol className="tableOfContent">
             {heading3Data.map((item, idx) => (
               <li key={item.id} className="tableOfContent-item">
-                <a href={`#${item.id}`}>
+                <button
+                  onClick={() => {
+                    const target = document.getElementById(item.id)
+                    target?.scrollIntoView({ behavior: 'smooth' })
+                  }}
+                >
                   <TableOfContentText
                     text={item.title}
                     isActive={activeId ? item.id === activeId : idx === 0}
                   />
-                </a>
+                </button>
               </li>
             ))}
           </ol>
