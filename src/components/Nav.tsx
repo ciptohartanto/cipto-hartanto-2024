@@ -26,7 +26,7 @@ export default function Nav() {
           animate: {
             opacity: 1,
             x: 0,
-            transition: { delay: 3, duration: 0.2 },
+            transition: { delay: 1, duration: 0.2 },
           },
         }}
       >
