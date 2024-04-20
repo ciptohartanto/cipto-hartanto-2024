@@ -1,0 +1,50 @@
+.codeSnippet {
+  @extend %full-flex;
+
+  position: relative;
+  z-index: 1;
+  width: calc(100vw - 36px);
+  overflow: auto;
+
+  @include desktop-view {
+    width: 100%;
+  }
+
+  pre {
+    width: 100%;
+    @include mobile-view {
+      padding-top: 40px !important;
+    }
+  }
+
+  code {
+    @include mobile-view {
+      padding-right: 30px !important;
+      float: left;
+      font-size: 10px !important;
+    }
+    @include desktop-view {
+      font-size: 12px !important;
+    }
+  }
+
+  &--inline {
+    display: inline-block;
+    padding: 3px 7px;
+    border-radius: 3px;
+    background-color: rgba($code-background, $opacity-50);
+    color: $white;
+    font-family: $code-font-family;
+    font-size: 0.8em;
+    line-height: 1.2em;
+  }
+
+  &-button {
+    position: absolute;
+    z-index: 2;
+    top: 15px;
+    right: 10px;
+    color: rgba($white, $opacity-50);
+    cursor: pointer;
+  }
+}

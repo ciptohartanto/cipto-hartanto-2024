@@ -1,0 +1,56 @@
+$name: '.iconX';
+
+#{$name} {
+  @extend %inline-flex, %flex-center;
+
+  cursor: pointer;
+
+  &--large {
+    width: 26px;
+    height: 26px;
+  }
+
+  &--light {
+    width: 24px;
+    height: 24px;
+  }
+
+  &--small {
+    width: 25px;
+    height: 25px;
+  }
+
+  &-line {
+    background-color: $color-nav-hamburger;
+
+    #{$name}--large & {
+      width: 32px;
+      height: 5px;
+    }
+
+    #{$name}--large:hover & {
+      height: 3px;
+      transition: 0.3s $transition-style height;
+    }
+
+    #{$name}--small & {
+      width: 25px;
+      height: 4px;
+    }
+
+    #{$name}--small:hover & {
+      height: 3px;
+      transition: 0.3s $transition-style height;
+    }
+
+    #{$name}--light & {
+      width: 25px;
+      height: 3px;
+    }
+
+    #{$name}--light:hover & {
+      height: 1px;
+      transition: 0.3s $transition-style height;
+    }
+  }
+}

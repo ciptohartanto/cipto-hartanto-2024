@@ -1,0 +1,100 @@
+$name: '.writings';
+
+#{$name} {
+  @extend %section-wrapper;
+
+  overflow-x: hidden;
+
+  &-row {
+    @extend %grid-wrapper;
+  }
+
+  &-title {
+    @extend %typography-section-title;
+
+    margin-bottom: 24px;
+    text-transform: uppercase;
+    @include desktop-view {
+      margin-bottom: 48px;
+    }
+  }
+
+  &-wrapper {
+    &SearchBox {
+      @extend %col-mobile--6, %col-desktop--4;
+
+      margin-bottom: 24px;
+
+      @include desktop-view {
+        margin-bottom: 48px;
+      }
+    }
+
+    &List {
+      @extend %col-mobile--6, %col-desktop--6, %flex-start-column;
+
+      @include push-me($view: 'desktop', $direction: 'left');
+
+      margin-top: 18px;
+      @include desktop-view {
+        margin-top: 0;
+      }
+    }
+  }
+
+  &-list {
+    position: relative;
+    width: auto;
+
+    &Item {
+      @include items-spacer(
+        $mobile: 16px,
+        $desktop: 22px,
+        $direction: 'bottom'
+      );
+
+      width: 100%;
+      @include desktop-view {
+        cursor: pointer;
+        #{$name}-list:hover & {
+          transition: 0.3s ease-in-out opacity;
+          opacity: $opacity-40 !important;
+
+          &:hover {
+            transition: 0.3s ease-in-out opacity;
+            opacity: $opacity-100 !important;
+          }
+        }
+      }
+    }
+  }
+
+  &-loadMore {
+    @extend %inline-flex, %typography-link-description, %link-hover;
+
+    margin-top: 24px;
+    @include desktop-view {
+      margin-top: 22px;
+      cursor: pointer;
+    }
+  }
+
+  &-counter {
+    margin-top: 24px;
+    @include desktop-view {
+      margin-top: 48px;
+    }
+
+    &Text {
+      @extend %typography-special-counter;
+
+      display: block;
+      opacity: 0.3;
+      text-align: right;
+    }
+  }
+
+  &-noArticles {
+    @extend %typography-card-title;
+  }
+}

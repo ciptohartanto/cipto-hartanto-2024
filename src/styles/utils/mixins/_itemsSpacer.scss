@@ -1,0 +1,24 @@
+@mixin items-spacer($mobile: null, $desktop: null, $direction: null) {
+  @if $direction and $mobile or $desktop {
+    @if $direction and $direction == 'right' or $direction == 'bottom' {
+      @if $desktop and $mobile {
+        margin-#{$direction}: $mobile;
+        @include desktop-view {
+          margin-#{$direction}: $desktop;
+        }
+      } @else {
+        @error '$mobile, and $desktop should have a value. Ex: 10px';
+      }
+
+      &:last-of-type {
+        @if $direction and $direction == 'right' or $direction == 'bottom' {
+          margin-#{$direction}: 0;
+        }
+      }
+    } @else {
+      @error '$direction: `#{$direction}` should have a value of right/bottom';
+    }
+  } @else {
+    @error '@mixin items-spacer needs $mobile, $desktop, $direction';
+  }
+}

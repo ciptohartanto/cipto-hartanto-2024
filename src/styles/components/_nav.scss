@@ -1,0 +1,78 @@
+.nav {
+  position: fixed;
+  z-index: $z-root-nav;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  @include desktop-view {
+    width: unset;
+    height: unset;
+  }
+
+  &-wrapper {
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  &-icon {
+    @extend %inline-flex, %flex-center;
+
+    position: fixed;
+    z-index: 1;
+    top: 30px;
+    right: 30px;
+    width: 25px;
+    height: 25px;
+    @include desktop-view {
+      top: 69px;
+      right: 81.5px;
+    }
+  }
+
+  &-iconWrapper {
+    @extend %inline-flex, %flex-center;
+
+    position: absolute;
+  }
+
+  &-navigation {
+    @extend %inline-flex, %flex-center;
+
+    width: 100vw;
+    height: 100vh;
+    padding: 0 20px;
+    background-color: $white;
+    @include desktop-view {
+      width: auto;
+      height: 100%;
+      padding: 0 176px;
+    }
+  }
+
+  &-list {
+    width: 100%;
+  }
+
+  &-item {
+    @include items-spacer($mobile: 20px, $desktop: 20px, $direction: 'bottom');
+
+    transform: translateX(0);
+    transition: 0.3s $transition-style transform;
+    cursor: pointer;
+
+    &:hover {
+      transform: translateX(8px);
+      transition: 0.3s $transition-style transform;
+    }
+  }
+
+  &-text {
+    @extend %typography-section-title-normal;
+
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+}

@@ -1,0 +1,65 @@
+/*
+  *****
+  Visual related configs
+  *****
+*/
+
+$black: #000;
+$white: #fff;
+$golden: #f8cc31;
+
+// bases
+$color-background: #f8f8f8;
+$color-text: $black;
+$color-nav-hamburger: #6c5e5e;
+$select-highlight-background: #7927ff;
+$code-background: #011627;
+
+// opacity levels
+$opacity-100: 1;
+$opacity-40: 0.4;
+$opacity-50: 0.5;
+$opacity-70: 0.7;
+
+// grays
+$gray-1: #d9d9d9;
+
+// cubic-bezier styling
+$transition-style: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+// z indices
+$z-root-pedestal-background: -2;
+$z-root-curtain: 2;
+$z-root-nav: 5;
+$z-root-popup: 6;
+
+/*
+  *****
+  Grid system configs
+  *****
+*/
+
+// grid config
+$grid-mobile: 6;
+$grid-desktop: 12;
+$gutter-mobile: 20px;
+$gutter-desktop: 32px;
+$layout-margin-mobile: 18px;
+$layout-margin-desktop: 80px;
+
+/*
+  *****
+  Breakpoint configs
+  *****
+*/
+// breakpoint
+
+$breakpoint-desktop: 850px;
+
+/*
+  *****
+  Special Fonts
+  *****
+*/
+// font-family for <code />
+$code-font-family: consolas, monaco, 'Andale Mono', 'Ubuntu Mono', monospace;

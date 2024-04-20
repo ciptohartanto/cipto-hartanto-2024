@@ -1,0 +1,19 @@
+@mixin push-me($view, $direction) {
+  @if $direction == 'left' or $direction == 'right' {
+    @if $view == 'mobile' or $view== 'desktop' {
+      @if #{$view} == 'mobile' {
+        @include mobile-view {
+          margin-#{$direction}: auto;
+        }
+      } @else {
+        @include desktop-view {
+          margin-#{$direction}: auto;
+        }
+      }
+    } @else {
+      @error '$view: #{$view} is incorrect. $view can only be mobile | desktop.';
+    }
+  } @else {
+    @error ' $direction: `#{$direction}`  should be either 'left' or 'right'.';
+  }
+}

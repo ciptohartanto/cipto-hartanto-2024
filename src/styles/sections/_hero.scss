@@ -1,0 +1,30 @@
+.hero {
+  @extend %section-wrapper, %flex-center;
+
+  &-row {
+    @extend %grid-wrapper;
+  }
+
+  &-colWrapper {
+    @extend %col-mobile--6, %col-desktop--12, %flex-center;
+
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  &-subtitle {
+    @extend %typography-section-title-normal;
+
+    margin-bottom: 5px;
+  }
+
+  &-caption {
+    @extend %typography-section-description;
+
+    margin-bottom: 5px;
+  }
+
+  &-link {
+    @extend %inline-flex, %flex-center, %link-hover, %typography-link-title;
+  }
+}

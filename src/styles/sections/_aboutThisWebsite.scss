@@ -1,0 +1,46 @@
+.aboutTheWebsite {
+  @extend %section-wrapper;
+
+  height: auto;
+  min-height: unset; // reset min-height: 100vh
+
+  &-title {
+    @extend %typography-section-title;
+
+    margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+
+  &-wrapper {
+    &Content {
+      @extend %grid-wrapper;
+
+      margin-bottom: 60px;
+      @include desktop-view {
+        margin-top: 48px;
+        margin-bottom: 80px;
+      }
+    }
+
+    &List {
+      @extend %col-mobile--6, %col-desktop--4;
+
+      flex-flow: column wrap;
+      @include items-spacer($mobile: 24px, $desktop: 0, $direction: 'bottom');
+    }
+  }
+
+  &-item {
+    @include items-spacer($mobile: 24px, $desktop: 40px, $direction: 'bottom');
+  }
+
+  &-subsectionText {
+    @extend %typography-section-description;
+
+    a {
+      @extend %inline-flex, %flex-center, %link-hover, %typography-link-title;
+
+      position: relative;
+    }
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "name": "cipto-hartanto--portfolio-website-2024",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "graphql-codegen --config codegen.ts --require dotenv/config && next dev",
+    "build": "graphql-codegen --config codegen.ts --require dotenv/config && next build",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "npx prettier --write .",
+    "lint:fix": "next lint --fix",
+    "lint:strict": "next lint '*/**/*.{js,jsx,ts,tsx}'",
+    "prettier": "prettier --write */**/*.{json,ts,tsx,scss,css,md}",
+    "prepare": "husky",
+    "codegen": "graphql-codegen --config codegen.ts --require dotenv/config"
+  },
+  "lint-staged": {
+    "*/**/*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "eslint --fix",
+      "eslint"
+    ],
+    "*.scss": [
+      "stylelint --fix"
+    ]
+  },
+  "dependencies": {
+    "@apollo/client": "^3.9.11",
+    "@studio-freight/react-lenis": "^0.0.46",
+    "classnames": "^2.5.1",
+    "dotenv": "^16.4.5",
+    "framer-motion": "^11.0.25",
+    "graphql": "^16.8.1",
+    "next": "14.1.4",
+    "react": "^18",
+    "react-copy-to-clipboard": "^5.1.0",
+    "react-dom": "^18",
+    "react-markdown": "^9.0.1",
+    "react-syntax-highlighter": "^15.5.0",
+    "swiper": "^11.1.0"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "5.0.2",
+    "@graphql-codegen/client-preset": "4.2.5",
+    "@next/eslint-plugin-next": "^14.1.4",
+    "@svgr/webpack": "^8.1.0",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-copy-to-clipboard": "^5.0.7",
+    "@types/react-dom": "^18",
+    "@types/react-syntax-highlighter": "^15.5.11",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/typescript-estree": "^7.4.0",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "14.1.4",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-simple-import-sort": "^12.0.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "prettier": "^3.2.5",
+    "sass": "^1.72.0",
+    "stylelint": "^16.3.1",
+    "stylelint-config-prettier-scss": "^1.0.0",
+    "stylelint-config-property-sort-order-smacss": "^10.0.0",
+    "stylelint-config-standard-scss": "^13.0.0",
+    "stylelint-plugin-defensive-css": "^1.0.3",
+    "stylelint-use-nesting": "^5.1.1",
+    "typescript": "^5.4.0"
+  }
+}

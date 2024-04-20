@@ -1,0 +1,16 @@
+// to include column maker functions
+
+@import './../functions/columnMaker';
+
+%grid-wrapper {
+  @extend %inline-flex, %flex-start-row;
+
+  width: calc(100% + $gutter-mobile);
+  margin-right: -$gutter-mobile / 2;
+  margin-left: -$gutter-mobile / 2;
+  @include desktop-view {
+    width: calc(100% + $gutter-desktop);
+    margin-right: -$gutter-desktop / 2;
+    margin-left: -$gutter-desktop / 2;
+  }
+}

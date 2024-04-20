@@ -1,0 +1,84 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  overflow: hidden auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+span {
+  letter-spacing: 0.07em;
+  line-height: 1.6em;
+}
+
+input:active,
+input:focus {
+  outline: none;
+}
+
+button {
+  border: none;
+  outline: none;
+  background: none;
+  box-shadow: none;
+}
+
+// CSS scrollbars
+
+/* Firefox */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: $black $white;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 5px;
+}
+
+*::-webkit-scrollbar-track {
+  background: $white;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba($black, $opacity-50);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: $black;
+}
+
+a,
+a:focus,
+a:visited,
+a:hover {
+  color: inherit;
+  text-decoration: unset;
+}
+
+// selections
+
+::selection {
+  background: $select-highlight-background;
+  color: $white;
+}
+
+// locks body when Popup is showing
+.bodyLock {
+  overflow-y: hidden;
+}

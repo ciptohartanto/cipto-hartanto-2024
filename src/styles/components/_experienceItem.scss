@@ -1,0 +1,145 @@
+$name: '.experienceItem';
+
+#{$name} {
+  @extend %full-flex;
+
+  flex-direction: row;
+  padding: 0 16px;
+
+  &-wrapper {
+    &Left {
+      @extend %inline-flex;
+
+      position: relative;
+      align-items: flex-start;
+      justify-content: center;
+      width: auto;
+      padding-top: 8px;
+      padding-right: 16px;
+
+      &::before {
+        content: '';
+        position: absolute;
+        width: 0.8px;
+        height: calc(100% - 13px);
+        transform: translateY(13px);
+        background-color: $golden;
+        @include desktop-view {
+          width: 1px;
+          height: calc(100% - 11px);
+          transform: translateY(4px);
+        }
+      }
+
+      @include desktop-view {
+        &::before {
+          top: 15px;
+        }
+      }
+
+      #{$name}--lastItem & {
+        &::before {
+          display: none;
+        }
+      }
+    }
+
+    &Right {
+      @extend %inline-flex;
+
+      flex: 1;
+      flex-flow: column wrap;
+      width: auto;
+      padding-bottom: 40px;
+
+      #{$name}--lastItem & {
+        padding-bottom: 0;
+      }
+
+      @include desktop-view {
+        padding-bottom: 30px;
+      }
+    }
+
+    &Links {
+      ul {
+        @extend %inline-flex, %flex-start-row;
+
+        @include items-spacer(
+          $mobile: 5px,
+          $desktop: 10px,
+          $direction: 'right'
+        );
+      }
+
+      a {
+        @extend %inline-flex, %link-hover, %typography-link-description;
+
+        position: relative;
+      }
+    }
+  }
+
+  &-bullet {
+    @extend %inline-flex, %flex-center;
+
+    position: relative;
+    width: 13px;
+    height: 13px;
+    border-radius: 100%;
+    background-color: $golden;
+
+    #{$name}--previous & {
+      border: 1px solid $golden;
+      background-color: transparent;
+    }
+
+    @include desktop-view {
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  &-title {
+    @extend %typography-card-title;
+
+    margin-bottom: 7px;
+  }
+
+  &-date {
+    @extend %typography-card-description;
+
+    margin-bottom: 7px;
+  }
+
+  &-content {
+    @extend %typography-card-caption;
+
+    @include mobile-view {
+      margin-top: 10px;
+    }
+
+    p:last-of-type {
+      margin-bottom: 0 !important;
+    }
+  }
+
+  &-tagList {
+    @extend %inline-flex;
+  }
+
+  &-tag {
+    @include items-spacer($mobile: 7px, $desktop: 7px, $direction: 'bottom');
+    @include items-spacer($mobile: 5px, $desktop: 5px, $direction: 'right');
+
+    padding-left: 0 !important; // override li styling of .resumeBody
+
+    &::before {
+      display: none !important; // override li::before styling of .resumeBody
+    }
+  }
+
+  &-position {
+    @extend %typography-card-caption;
+  }
+}

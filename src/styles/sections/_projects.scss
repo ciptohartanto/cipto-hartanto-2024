@@ -1,0 +1,121 @@
+$css: '.projects';
+
+#{$css} {
+  &-wrapper {
+    @extend %section-wrapper;
+
+    display: block;
+    overflow-x: hidden;
+  }
+
+  &-title {
+    @extend %typography-section-title;
+
+    margin-bottom: 48px;
+    text-transform: uppercase;
+  }
+
+  &-swiper {
+    &Wrapper {
+      position: relative;
+      margin-right: -15px;
+      margin-left: -15px;
+      overflow-x: hidden;
+    }
+
+    &Module {
+      padding-right: 15px !important;
+      padding-left: 15px !important;
+    }
+
+    &ContentWrapper {
+      @extend %inline-flex, %flex-start-column;
+
+      width: 100%;
+      transition: 0.3s $transition-style opacity;
+      opacity: $opacity-50;
+      cursor: grab;
+
+      &--active {
+        transform: scale(1);
+        transition:
+          0.3s $transition-style transform,
+          0.3s ease-in-out opacity;
+        opacity: $opacity-100;
+        cursor: pointer;
+
+        &:hover {
+          transform: scale(0.995);
+          transition: 0.3s $transition-style transform;
+        }
+      }
+    }
+
+    &TextWrapper {
+      @extend %inline-flex, %flex-start-column;
+
+      visibility: hidden;
+      margin-top: 10px;
+      @include desktop-view {
+        margin-top: 2.5px;
+      }
+
+      #{$css}-swiperContentWrapper--active & {
+        visibility: visible;
+      }
+    }
+
+    &Thumbnail {
+      @extend %cover-background-image;
+
+      width: 100%;
+      padding-top: (192 / 278 * 100%);
+      @include desktop-view {
+        padding-top: (415 / 622 * 100%);
+      }
+
+      border-radius: 12px;
+    }
+
+    &Title {
+      @extend %typography-card-title;
+    }
+
+    &Date {
+      @extend %typography-card-caption;
+
+      margin-top: 4px;
+      @include desktop-view {
+        margin-top: 10px;
+      }
+    }
+
+    &Tags {
+      @extend %inline-flex, %flex-start-row;
+
+      margin-top: 4px;
+      @include desktop-view {
+        margin-top: 10px;
+      }
+    }
+
+    &Tag {
+      @include items-spacer($mobile: 10px, $desktop: 10px, $direction: 'right');
+    }
+  }
+
+  &-counter {
+    margin-top: 24px;
+    @include desktop-view {
+      margin-top: 48px;
+    }
+
+    &Text {
+      @extend %typography-special-counter;
+
+      display: block;
+      opacity: 0.3;
+      text-align: right;
+    }
+  }
+}

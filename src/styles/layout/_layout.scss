@@ -1,0 +1,43 @@
+.layout {
+  &-wrapper {
+    position: relative;
+    width: calc(100% - $layout-margin-mobile * 2);
+    margin-right: auto;
+    margin-left: auto;
+
+    @include desktop-view {
+      width: calc(100% - $layout-margin-desktop * 2);
+      max-width: 1440px;
+    }
+  }
+
+  &-background {
+    position: fixed;
+    z-index: $z-root-pedestal-background;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: $color-background;
+
+    @include desktop-view {
+      min-width: 1440px;
+    }
+  }
+
+  &-curtain {
+    position: fixed;
+    z-index: $z-root-curtain;
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: 78px;
+    background-image: radial-gradient(transparent 1px, $white 0);
+    background-size: 8px 8px;
+
+    @include desktop-view {
+      height: 54px;
+    }
+  }
+}

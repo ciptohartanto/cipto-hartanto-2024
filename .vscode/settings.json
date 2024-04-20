@@ -1,0 +1,9 @@
+{
+  "editor.detectIndentation": false,
+  "editor.insertSpaces": true,
+  "editor.tabSize": 2,
+  "stylelint.validate": ["css", "postcss", "scss"], // needs to install stylelint on Visual Studio Code
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "extends": [
+    "stylelint-config-standard-scss",
+    "stylelint-config-prettier-scss",
+    "stylelint-config-property-sort-order-smacss"
+  ],
+  "plugins": ["stylelint-use-nesting", "stylelint-plugin-defensive-css"],
+  "rules": {
+    "csstools/use-nesting": "always",
+    "selector-class-pattern": [
+      "^([a-z][a-zA-Z0-9]+)((-?|--)?[a-z0-9]+[a-zA-Z0-9]*)*$",
+      {
+        "resolveNestedSelectors": true
+      }
+    ],
+    "plugin/use-defensive-css": [
+      true,
+      {
+        "background-repeat": true,
+        "custom-property-fallbacks": true,
+        "flex-wrapping": true,
+        "vendor-prefix-grouping": true
+      }
+    ],
+    "declaration-block-no-redundant-longhand-properties": [
+      true,
+      { "ignoreShorthands": ["inset"] }
+    ]
+  }
+}

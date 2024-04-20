@@ -1,0 +1,44 @@
+@mixin arrow($parent-css) {
+  @extend %inline-flex, %flex-center;
+
+  width: 18px;
+  height: 18px;
+  border-radius: 100%;
+  background-color: $gray-1;
+
+  @include desktop-view {
+    width: 24px;
+    height: 24px;
+  }
+
+  &::after {
+    content: '';
+    @include background-image('./../../../assets/icons/arrow-static.svg');
+
+    width: 9.5px;
+    height: 9.5px;
+    @include desktop-view {
+      width: 11.5px;
+      height: 11.5px;
+      transform: translateY(2px) translateX(-2px);
+      transition: 0.2s $transition-style;
+      transition-property: transform, background;
+      @include background-image('./../../../assets/icons/arrow-default.svg');
+    }
+  }
+
+  #{$parent-css}:hover & {
+    background-color: $black;
+    cursor: pointer;
+
+    &::after {
+      @include background-image(
+        './../../../assets/icons/arrow-default-white.svg'
+      );
+
+      transform: translateY(-2px) translateX(2px);
+      transition: 0.5s $transition-style;
+      transition-property: transform, background;
+    }
+  }
+}

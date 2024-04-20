@@ -1,0 +1,32 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "plugin:react/recommended",
+    "eslint:recommended",
+    "next",
+    "prettier"
+  ],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["react", "simple-import-sort", "@typescript-eslint"],
+  "rules": {
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+    "import/newline-after-import": "error",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "error",
+    "import/first": "error",
+    "react/self-closing-comp": [
+      "error",
+      {
+        "component": true,
+        "html": true
+      }
+    ]
+  }
+}

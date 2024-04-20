@@ -1,0 +1,22 @@
+@for $index-mobile from 1 through $grid-mobile {
+  %col-mobile--#{$index-mobile} {
+    @extend %inline-flex;
+    @include mobile-view {
+      width: calc($index-mobile / $grid-mobile * 100% - $gutter-mobile);
+      margin-right: $gutter-mobile/2;
+      margin-left: $gutter-mobile/2;
+    }
+  }
+}
+
+@for $index-desktop from 1 through $grid-desktop {
+  %col-desktop--#{$index-desktop} {
+    @extend %inline-flex;
+
+    @include desktop-view {
+      width: calc($index-desktop / $grid-desktop * 100% - $gutter-desktop);
+      margin-right: $gutter-desktop/2;
+      margin-left: $gutter-desktop/2;
+    }
+  }
+}

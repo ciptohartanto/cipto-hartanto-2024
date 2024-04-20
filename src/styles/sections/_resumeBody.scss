@@ -1,0 +1,113 @@
+.resumeBody {
+  @extend %end-page-wrapper;
+
+  // background-color: red;
+
+  &-wrapper {
+    @extend %full-flex, %grid-wrapper;
+
+    &Top {
+      @extend %full-flex, %col-mobile--6, %col-desktop--12;
+
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    &Section {
+      @extend %full-flex, %flex-start-column, %col-mobile--6, %col-desktop--8;
+
+      margin-top: 40px;
+    }
+  }
+
+  &-iconPdf {
+    @extend %inline-flex, %flex-center;
+
+    position: relative;
+    z-index: 1;
+    width: 45px;
+    height: 45px;
+    font-size: 10px;
+    font-weight: 700;
+    @include push-me($view: 'desktop', $direction: 'left');
+
+    @include desktop-view {
+      width: 82px;
+      height: 82px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    &::before,
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      z-index: -1;
+      width: 35px;
+      height: 40px;
+      border: 2px solid $black;
+      border-radius: 4px;
+      background-color: $white;
+
+      @include desktop-view {
+        width: 60px;
+        height: 70px;
+        border: 3px solid $black;
+        border-radius: 6px;
+      }
+    }
+
+    &::before {
+      top: 7px;
+      left: 0;
+      @include desktop-view {
+        top: 12px;
+        left: 5px;
+      }
+    }
+
+    &:hover {
+      &::before {
+        transform: translateX(-1px) translateY(3px);
+        animation: zooming alternate linear 1s infinite;
+      }
+    }
+  }
+
+  &-subsection {
+    @include items-spacer($mobile: 32px, $desktop: 32px, $direction: 'bottom');
+    @extend %markdown-list-style;
+
+    p {
+      @extend %typography-section-description;
+
+      @include items-spacer(
+        $mobile: 24px,
+        $desktop: 20px,
+        $direction: 'bottom'
+      );
+    }
+
+    strong {
+      display: block;
+      margin-top: 3px;
+      margin-bottom: 3px;
+      font-weight: 700;
+    }
+
+    li {
+      @extend %typography-section-description;
+    }
+  }
+}
+
+@keyframes zooming {
+  0% {
+    transform: translateX(-1px) translateY(1px);
+  }
+
+  100% {
+    transform: translateX(4px) translateY(-4px);
+  }
+}

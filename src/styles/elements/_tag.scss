@@ -1,0 +1,15 @@
+.tag {
+  @extend %inline-flex, %flex-center;
+
+  padding: 4px 16px;
+  border: 1px solid $black;
+  border-radius: 5px;
+
+  @include desktop-view {
+    padding: 7px 14px;
+  }
+
+  &-text {
+    @extend %typography-tag-text;
+  }
+}

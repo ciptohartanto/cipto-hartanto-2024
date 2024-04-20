@@ -1,0 +1,24 @@
+%section-wrapper {
+  @extend %inline-flex;
+
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+  padding: 36px 0;
+
+  @include desktop-view {
+    padding: 72px 0;
+  }
+}
+
+%end-page-wrapper {
+  @extend %inline-flex, %flex-start-column;
+
+  margin-top: 111px;
+  margin-bottom: 98px;
+  @include desktop-view {
+    width: 100%;
+    margin-top: 134px;
+    margin-bottom: 132px;
+  }
+}

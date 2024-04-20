@@ -1,0 +1,51 @@
+$css: '.tableOfContentText';
+
+#{$css} {
+  @extend %inline-flex, %flex-start-row;
+
+  position: relative;
+  margin-left: 0;
+  transition: 0.2s ease-in-out;
+  transition-property: margin-left, opacity;
+  opacity: $opacity-70;
+  cursor: pointer;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -16px;
+    width: 0;
+    height: 0;
+    margin-right: 0;
+    transform: translateY(-50%);
+    transition: 0.2s ease-in-out all;
+    background-color: transparent;
+  }
+
+  &--active {
+    margin-left: 16px;
+    transition: 0.2s ease-in-out;
+    transition-property: margin-left, opacity;
+    opacity: $opacity-100;
+
+    &::before {
+      width: 2px;
+      height: 100%;
+      transition: 0.2s ease-in-out all;
+      background-color: $black;
+    }
+  }
+
+  &-text {
+    @extend %typography-section-description;
+
+    transition: 0.2s ease-in-out font-weight;
+
+    #{$css}--active &,
+    #{$css}:hover & {
+      transition: 0.2s ease-in-out font-weight;
+      font-weight: 700;
+    }
+  }
+}

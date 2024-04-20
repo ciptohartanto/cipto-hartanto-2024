@@ -1,0 +1,147 @@
+.articleBody {
+  @extend %end-page-wrapper;
+
+  pre {
+    width: 100%; // keep the code container 100%
+  }
+
+  &-wrapper {
+    @extend %full-flex, %grid-wrapper;
+    @include desktop-view {
+      margin-bottom: 40px;
+    }
+
+    &Top {
+      @extend %full-flex, %flex-start-column, %col-mobile--6, %col-desktop--12;
+
+      margin-bottom: 40px;
+    }
+
+    &Bottom {
+      @extend %inline-flex, %flex-start-row;
+
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    &BottomLeft {
+      @extend %col-mobile--6, %col-desktop--3;
+
+      @include mobile-view {
+        order: 2;
+      }
+
+      @include desktop-view {
+        position: sticky;
+        top: 100px;
+        order: 1;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: $white;
+      }
+    }
+
+    &Section {
+      @extend %full-flex, %flex-start-column, %col-mobile--6, %col-desktop--8;
+
+      order: 1;
+    }
+
+    &Tags {
+      @extend %inline-flex, %flex-start-row;
+    }
+  }
+
+  &-title {
+    @extend %typography-section-title-normal;
+
+    margin-bottom: 32px;
+  }
+
+  &-tag {
+    @include items-spacer($mobile: 10px, $desktop: 10px, $direction: 'right');
+  }
+
+  &-section {
+    @extend %markdown-list-style;
+
+    h3 {
+      @extend %typography-section-title-normal;
+
+      margin-top: -20px;
+      margin-bottom: 32px;
+      padding-top: 80px;
+
+      &:first-of-type {
+        margin-top: 0;
+        padding-top: 0;
+      }
+    }
+
+    h4 {
+      @extend %typography-card-title;
+    }
+
+    a {
+      display: inline-block;
+      position: relative;
+      vertical-align: middle;
+      @extend %link-hover, %typography-link-description;
+    }
+
+    p {
+      @extend %typography-section-description;
+
+      margin-bottom: 22px;
+    }
+  }
+
+  &-nav {
+    @extend %inline-flex, %flex-start-column;
+
+    width: 100%;
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid rgba($black, $opacity-40);
+
+    &Item {
+      @include items-spacer($mobile: 0, $desktop: 2px, $direction: 'bottom');
+
+      position: relative;
+
+      &--main {
+        &::before {
+          content: '⟲';
+          display: inline-block;
+          position: absolute;
+        }
+      }
+
+      &--next {
+        &::before {
+          content: '⪢';
+          display: inline-block;
+          position: absolute;
+        }
+      }
+
+      &--prev {
+        &::before {
+          content: '⪡';
+          display: inline-block;
+          position: absolute;
+        }
+      }
+    }
+
+    &Link {
+      @extend %inline-flex,
+        %flex-center,
+        %link-hover,
+        %typography-link-description;
+
+      position: relative;
+      margin-left: 18px;
+    }
+  }
+}

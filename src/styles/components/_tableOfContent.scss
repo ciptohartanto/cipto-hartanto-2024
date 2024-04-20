@@ -1,0 +1,17 @@
+.tableOfContent {
+  @include mobile-view {
+    display: none;
+  }
+
+  @extend %inline-flex, %flex-start-column;
+
+  width: 100%;
+
+  &-item {
+    @extend %inline-flex, %flex-start-column;
+
+    width: 100%;
+
+    @include items-spacer($mobile: 10px, $desktop: 10px, $direction: 'bottom');
+  }
+}

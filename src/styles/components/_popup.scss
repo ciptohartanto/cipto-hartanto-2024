@@ -1,0 +1,152 @@
+.popup {
+  @extend %inline-flex, %flex-center;
+
+  position: fixed;
+  z-index: $z-root-popup;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: $white;
+
+  &-wrapper {
+    @extend %inline-flex, %flex-center;
+
+    position: relative;
+    flex-direction: row-reverse;
+    width: calc(100% - 32px);
+    max-width: 600px;
+    @include desktop-view {
+      width: auto;
+      max-width: unset;
+    }
+
+    &Tags {
+      @extend %inline-flex, %flex-start-row;
+
+      width: 100%;
+      margin-top: 8px;
+      margin-bottom: -5px;
+      @include desktop-view {
+        margin-bottom: -10px;
+      }
+    }
+
+    &Description {
+      @extend %inline-flex, %flex-start-column;
+
+      width: 100%;
+      margin-top: 8px;
+      margin-bottom: 20px;
+      @include desktop-view {
+        margin-top: 8px;
+        margin-bottom: unset;
+      }
+    }
+  }
+
+  &-iconClose {
+    @extend %inline-flex, %flex-center;
+
+    position: absolute;
+    top: 16px;
+    right: 21px;
+
+    @include desktop-view {
+      position: relative;
+      top: unset;
+      right: unset;
+      margin-left: 46px;
+    }
+  }
+
+  &-body {
+    @extend %inline-flex, %flex-start-row;
+
+    justify-content: space-between;
+    width: 100%;
+    height: calc(100dvh - 24px);
+    padding: 60px 0;
+    border-radius: 18px;
+    background-color: $white;
+    @include desktop-view {
+      width: 1199px;
+      height: 730px;
+      padding: 50px;
+    }
+  }
+
+  &-row {
+    @extend %grid-wrapper;
+  }
+
+  &-background {
+    @extend %cover-background-image, %col-mobile--6, %col-desktop--6;
+
+    max-height: 430px;
+    padding-top: 66%;
+    @include desktop-view {
+      padding-top: 33%;
+    }
+  }
+
+  &-content {
+    @extend %col-mobile--6, %col-desktop--6;
+
+    flex-direction: row;
+    height: calc(100dvh - 430px);
+    margin-top: 20px;
+    padding: 0 18px 40px;
+    overflow-y: auto;
+    @include desktop-view {
+      position: relative; // must be explicitly defined so %link-hover can work
+      flex-direction: row;
+      height: 630px;
+      margin-top: 0;
+      padding: unset;
+    }
+  }
+
+  &-title {
+    @extend %typography-section-title-normal;
+  }
+
+  &-description {
+    @extend %typography-card-caption;
+  }
+
+  &-externalLink {
+    @extend %inline-flex, %flex-center, %typography-card-caption, %link-hover;
+  }
+
+  &-story {
+    width: 100%;
+    margin-top: 8px;
+    padding-right: 20px;
+
+    @extend %markdown-list-style;
+
+    h3 {
+      @extend %typography-card-title;
+
+      margin-top: 20px;
+      margin-bottom: 12px;
+    }
+
+    p {
+      @extend %typography-section-description;
+
+      margin-top: 10px;
+      margin-bottom: 22px;
+    }
+
+    li {
+      @extend %typography-section-description;
+    }
+  }
+
+  &-tag {
+    @include items-spacer($mobile: 8px, $desktop: 8px, $direction: 'right');
+    @include items-spacer($mobile: 5px, $desktop: 10px, $direction: 'bottom');
+  }
+}

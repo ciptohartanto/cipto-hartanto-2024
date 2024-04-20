@@ -1,0 +1,10 @@
+.subSection {
+  &-title {
+    @extend %typography-card-title;
+
+    margin-bottom: 6px;
+    @include desktop-view {
+      margin-bottom: 12px;
+    }
+  }
+}
