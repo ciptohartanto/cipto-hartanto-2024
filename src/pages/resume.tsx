@@ -4,6 +4,7 @@ import clientQuery from '@/api/clientQuery'
 import PageHead from '@/components/PageHead'
 import { PAGE_TITLE } from '@/constants/project'
 import { Resume as ResumePageProps, ResumeQuery } from '@/gql/graphql'
+import Layout from '@/layout/Layout'
 import QUERY_RESUME from '@/queries/queryResume'
 import ResumeBody from '@/sections/ResumeBody'
 
@@ -16,7 +17,9 @@ export default function ResumePage({ resume }: { resume: ResumePageProps }) {
         pageTitle={PAGE_TITLE.resume}
         metaDescription={resumeBodyData.metaDescription}
       />
-      <ResumeBody componentData={resumeBodyData} />
+      <Layout>
+        <ResumeBody componentData={resumeBodyData} />
+      </Layout>
     </>
   )
 }

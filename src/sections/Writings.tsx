@@ -119,7 +119,7 @@ export default function Writings({
           ) : (
             <span className="writings-noArticles">
               Oops, no articles (╥﹏╥). <br />
-              How about trying something else?
+              How about trying another keywords?
             </span>
           )}
         </div>
