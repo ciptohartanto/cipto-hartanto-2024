@@ -12,6 +12,7 @@ import {
   Writing,
   WritingOrderByInput,
 } from '@/gql/graphql'
+import Layout from '@/layout/Layout'
 import QUERY_HOME from '@/queries/queryHome'
 import AboutTheWebsite from '@/sections/AboutTheWebsite'
 import Hero from '@/sections/Hero'
@@ -39,26 +40,28 @@ export default function HomePage({
   return (
     <>
       <PageHead pageTitle={PAGE_TITLE.home} metaDescription={metaDescription} />
-      <Hero componentData={heroContent} />
-      <Projects
-        handleClick={(val) => {
-          setIsPopupActive(val)
-        }}
-        handleUpdatePopupData={(id) => {
-          const data = projectContent.listOfProjects[id]
-          setPopupData(data)
-        }}
-        componentData={projectContent}
-      />
-      <Writings componentData={writingsContent} articleList={writings} />
-      <AboutTheWebsite componentData={aboutContent} />
-      {popupData && (
-        <Popup
-          handleClick={(val) => setIsPopupActive(val)}
-          shouldDisplayPopup={isPopupActive}
-          componentData={popupData}
+      <Layout>
+        <Hero componentData={heroContent} />
+        <Projects
+          handleClick={(val) => {
+            setIsPopupActive(val)
+          }}
+          handleUpdatePopupData={(id) => {
+            const data = projectContent.listOfProjects[id]
+            setPopupData(data)
+          }}
+          componentData={projectContent}
         />
-      )}
+        <Writings componentData={writingsContent} articleList={writings} />
+        <AboutTheWebsite componentData={aboutContent} />
+        {popupData && (
+          <Popup
+            handleClick={(val) => setIsPopupActive(val)}
+            shouldDisplayPopup={isPopupActive}
+            componentData={popupData}
+          />
+        )}
+      </Layout>
     </>
   )
 }
