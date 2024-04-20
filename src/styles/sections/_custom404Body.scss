@@ -1,0 +1,58 @@
+.custom404Body {
+  @extend %inline-flex, %flex-center;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  flex-direction: column;
+  width: calc(100vw - 30px);
+  transform: translateX(-50%) translateY(-50%);
+
+  &-title {
+    @extend %typography-section-title-normal;
+
+    text-align: center;
+  }
+
+  &-buttonText {
+    @extend %inline-flex, %link-hover, %typography-link-title;
+
+    position: relative;
+
+    &--hover {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  &-list {
+    @extend %inline-flex, %flex-center;
+
+    position: relative;
+    flex-direction: column;
+    margin-top: 100px;
+  }
+
+  &-item {
+    @extend %inline-flex, %flex-center;
+
+    position: relative;
+
+    &--home {
+      &::before {
+        content: '⟲';
+        display: inline-block;
+        position: relative;
+      }
+    }
+
+    &--goBackHistory {
+      &::before {
+        content: '⪡';
+        display: inline-block;
+        position: relative;
+      }
+    }
+  }
+}

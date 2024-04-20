@@ -9,6 +9,7 @@ import {
   WritingOrderByInput,
   WritingsQuery,
 } from '@/gql/graphql'
+import Layout from '@/layout/Layout'
 import QUERY_WRITING_ITEM from '@/queries/queryWritingItem'
 import QUERY_WRITINGS from '@/queries/queryWritings'
 import ArticleBody, { ArticleNavProps } from '@/sections/ArticleBody'
@@ -59,10 +60,12 @@ export default function WritingsPage({
         pageTitle={articleBodyData.title}
         metaDescription={articleBodyData.metaDescription}
       />
-      <ArticleBody
-        componentData={articleBodyData}
-        articleNav={memoArticleNav[0]}
-      />
+      <Layout>
+        <ArticleBody
+          componentData={articleBodyData}
+          articleNav={memoArticleNav[0]}
+        />
+      </Layout>
     </>
   )
 }

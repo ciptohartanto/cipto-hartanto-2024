@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 
 import { HEADING3_CSS, TOC_ROOT_MARGIN } from '@/constants/project'
@@ -13,8 +12,6 @@ export default function TableOfContent() {
   const [heading3Data, setHeading3Data] = useState<[] | Heading3DataProps[]>()
   const [activeId, setActiveId] = useState<undefined | string>(undefined)
 
-  const router = useRouter()
-
   const memoAllHeadings = useMemo(() => {
     return (
       <>
@@ -22,12 +19,17 @@ export default function TableOfContent() {
           <ol className="tableOfContent">
             {heading3Data.map((item, idx) => (
               <li key={item.id} className="tableOfContent-item">
-                <a href={`#${item.id}`}>
+                <button
+                  onClick={() => {
+                    const target = document.getElementById(item.id)
+                    target?.scrollIntoView({ behavior: 'smooth' })
+                  }}
+                >
                   <TableOfContentText
                     text={item.title}
                     isActive={activeId ? item.id === activeId : idx === 0}
                   />
-                </a>
+                </button>
               </li>
             ))}
           </ol>
@@ -37,7 +39,7 @@ export default function TableOfContent() {
   }, [heading3Data, activeId])
 
   useEffect(() => {
-    if (document) {
+    if (typeof window !== 'undefined') {
       const heading3s = document.querySelectorAll(`.${HEADING3_CSS}`)
 
       const idTextWithoutSpace = (idText: any) => {
@@ -80,7 +82,7 @@ export default function TableOfContent() {
       // update heading3 data in heading3Data
       setHeading3Data(newArr)
     }
-  }, [router])
+  }, [])
 
   return <div className="tableOfContent">{memoAllHeadings}</div>
 }

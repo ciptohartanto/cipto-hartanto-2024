@@ -41,9 +41,10 @@ $css: '.tableOfContentText';
     @extend %typography-section-description;
 
     transition: 0.2s ease-in-out font-weight;
+    text-align: left;
 
     #{$css}--active &,
-    #{$css}:hover & {
+    &:hover {
       transition: 0.2s ease-in-out font-weight;
       font-weight: 700;
     }
