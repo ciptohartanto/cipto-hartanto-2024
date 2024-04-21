@@ -48,6 +48,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           <div className="layout-curtain" />
           <motion.div
             className="layout-background"
+            key={router.asPath}
             initial="hide"
             animate="animate"
             exit="hide"
@@ -66,6 +67,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           />
           <motion.div
             className={classNames('layout-wrapper', urbanist.className)}
+            key={router.asPath}
             initial="hide"
             animate="animate"
             exit="hide"
@@ -73,7 +75,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               hide: {
                 opacity: 0,
                 y: 10,
-                scale: 0.95,
+                scale: isMobile ? 0.98 : 0.95,
                 transition: { duration: 0.3 },
               },
               animate: {
