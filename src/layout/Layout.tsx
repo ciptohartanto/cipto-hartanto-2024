@@ -42,7 +42,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   if (isMobile === undefined) return <></>
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait" initial={false}>
       {shouldDisplayContent && (
         <>
           <div className="layout-curtain" />
@@ -55,11 +55,9 @@ export default function Layout({ children }: { children: ReactNode }) {
             variants={{
               hide: {
                 width: '100vw',
-                opacity: 0,
                 transition: { duration: 0.3 },
               },
               animate: {
-                opacity: 1,
                 width: isMobile ? 'calc(100vw - 20px)' : 'calc(100vw - 70px)',
                 transition: { duration: 1.3 },
               },
