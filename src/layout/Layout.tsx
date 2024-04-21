@@ -39,6 +39,25 @@ export default function Layout({ children }: { children: ReactNode }) {
     }
   }, [router])
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Get the hash from the router
+      const hashId = router.asPath.split('#')[1]
+
+      if (hashId && isMobile !== undefined) {
+        const element = document.getElementById(hashId)
+
+        if (element) {
+          setTimeout(() => {
+            element.scrollIntoView({
+              behavior: 'smooth',
+            })
+          }, 100)
+        }
+      }
+    }
+  }, [router.asPath, isMobile])
+
   return (
     <AnimatePresence mode="wait">
       {shouldDisplayContent && (
