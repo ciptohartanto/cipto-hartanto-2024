@@ -39,11 +39,9 @@ export default function Layout({ children }: { children: ReactNode }) {
     }
   }, [router])
 
-  if (isMobile === undefined) return <></>
-
   return (
-    <AnimatePresence mode="wait" initial={false}>
-      {shouldDisplayContent && (
+    <AnimatePresence mode="wait">
+      {shouldDisplayContent && isMobile !== undefined && (
         <>
           <div className="layout-curtain" />
           <motion.div
