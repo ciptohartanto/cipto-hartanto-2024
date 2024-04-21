@@ -83,7 +83,7 @@
   &-background {
     @extend %cover-background-image, %col-mobile--6, %col-desktop--6;
 
-    max-height: 430px;
+    max-height: calc(0.33 * 100dvh);
     padding-top: 66%;
     @include desktop-view {
       padding-top: 33%;
@@ -94,9 +94,9 @@
     @extend %col-mobile--6, %col-desktop--6;
 
     flex-direction: row;
-    height: calc(100dvh - 430px);
+    height: calc(0.55 * 100dvh);
     margin-top: 20px;
-    padding: 0 18px 40px;
+    padding: 0 18px 30px;
     overflow-y: auto;
     @include desktop-view {
       position: relative; // must be explicitly defined so %link-hover can work
