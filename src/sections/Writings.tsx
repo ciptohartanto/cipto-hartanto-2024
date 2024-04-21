@@ -124,15 +124,11 @@ export default function Writings({
           )}
         </div>
       </div>
-      <motion.div
-        className="writings-counter"
-        {...FRAMER_SUB_SECTION_ANIMATION}
-        initial={{ x: 40, opacity: 0 }}
-      >
+      <div className="writings-counter">
         <span className="writings-counterText">
           {computedSearchData.counterText}
         </span>
-      </motion.div>
+      </div>
     </section>
   )
 }
