@@ -33,21 +33,11 @@ $css: '.projects';
 
       width: 100%;
       transition: 0.3s $transition-style opacity;
-      opacity: $opacity-50;
+      opacity: $opacity-40;
       cursor: grab;
 
       &--active {
-        transform: scale(1);
-        transition:
-          0.3s $transition-style transform,
-          0.3s ease-in-out opacity;
         opacity: $opacity-100;
-        cursor: pointer;
-
-        &:hover {
-          transform: scale(0.995);
-          transition: 0.3s $transition-style transform;
-        }
       }
     }
 
@@ -69,12 +59,14 @@ $css: '.projects';
       @extend %cover-background-image;
 
       width: 100%;
-      padding-top: (192 / 278 * 100%);
-      @include desktop-view {
-        padding-top: (415 / 622 * 100%);
-      }
-
       border-radius: 12px;
+
+      @include mobile-view {
+        padding-top: (192 / 278 * 100%) !important;
+      }
+      @include desktop-view {
+        background-position: top-left;
+      }
     }
 
     &Title {
@@ -101,6 +93,7 @@ $css: '.projects';
 
     &Tag {
       @include items-spacer($mobile: 10px, $desktop: 10px, $direction: 'right');
+      @include items-spacer($mobile: 5px, $desktop: 5px, $direction: 'bottom');
     }
   }
 
