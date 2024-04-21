@@ -44,7 +44,7 @@ $css: '.tableOfContentText';
     text-align: left;
 
     #{$css}--active &,
-    #{$css}:hover & {
+    &:hover {
       transition: 0.2s ease-in-out font-weight;
       font-weight: 700;
     }
