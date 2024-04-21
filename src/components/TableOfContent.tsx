@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { HEADING3_CSS, TOC_ROOT_MARGIN } from '@/constants/project'
 import TableOfContentText from '@/elements/TableOfContentText'
+import useWindowWidth from '@/hooks/useWindowWidth'
 
 type Heading3DataProps = {
   title: string
@@ -11,6 +12,7 @@ type Heading3DataProps = {
 export default function TableOfContent() {
   const [heading3Data, setHeading3Data] = useState<[] | Heading3DataProps[]>()
   const [activeId, setActiveId] = useState<undefined | string>(undefined)
+  const { isMobile } = useWindowWidth()
 
   const memoAllHeadings = useMemo(() => {
     return (
@@ -39,7 +41,7 @@ export default function TableOfContent() {
   }, [heading3Data, activeId])
 
   useEffect(() => {
-    if (document) {
+    if (document && isMobile !== undefined) {
       const heading3s = document.querySelectorAll(`.${HEADING3_CSS}`)
 
       const idTextWithoutSpace = (idText: any) => {
@@ -82,7 +84,7 @@ export default function TableOfContent() {
       // update heading3 data in heading3Data
       setHeading3Data(newArr)
     }
-  }, [])
+  }, [isMobile])
 
   return <div className="tableOfContent">{memoAllHeadings}</div>
 }
