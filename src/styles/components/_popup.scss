@@ -66,7 +66,7 @@
     justify-content: space-between;
     width: 100%;
     height: calc(100dvh - 24px);
-    padding: 60px 0;
+    padding: 60px 0 20px;
     border-radius: 18px;
     background-color: $white;
     @include desktop-view {
@@ -83,8 +83,10 @@
   &-background {
     @extend %cover-background-image, %col-mobile--6, %col-desktop--6;
 
-    max-height: calc(0.33 * 100dvh);
-    padding-top: 66%;
+    height: 300px;
+    background-size: contain;
+
+    // padding-top: 66%;
     @include desktop-view {
       padding-top: 33%;
     }
@@ -94,7 +96,7 @@
     @extend %col-mobile--6, %col-desktop--6;
 
     flex-direction: row;
-    height: calc(0.55 * 100dvh);
+    height: calc(100dvh - 24px - 300px - 80px - 20px);
     margin-top: 20px;
     padding: 0 18px 30px;
     overflow-y: auto;

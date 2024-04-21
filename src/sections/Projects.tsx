@@ -66,7 +66,6 @@ export default function Projects({
             spaceBetween={30}
             breakpoints={{ 850: { slidesPerView: 1.7, spaceBetween: 32 } }}
             className="projects-swiperModule"
-            threshold={140}
             speed={300}
             autoplay
             loop
