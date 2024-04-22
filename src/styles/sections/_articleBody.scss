@@ -69,29 +69,48 @@
       @extend %typography-section-title-normal;
 
       margin-top: -20px;
-      margin-bottom: 32px;
       padding-top: 80px;
 
       &:first-of-type {
         margin-top: -80px;
       }
+
+      + * {
+        margin-top: 32px;
+      }
     }
 
     h4 {
       @extend %typography-card-title;
+
+      + * {
+        margin-top: 18px;
+      }
     }
 
     a {
       display: inline-block;
       position: relative;
-      vertical-align: middle;
+      vertical-align: bottom;
       @extend %link-hover, %typography-link-description;
     }
 
-    p {
+    p,
+    ul,
+    pre {
       @extend %typography-section-description;
 
       margin-bottom: 22px;
+
+      // &:last-of-type {
+      //   margin-top: 0;
+      // }
+    }
+
+    img {
+      @extend %inline-flex;
+
+      width: 100%;
     }
   }
 
