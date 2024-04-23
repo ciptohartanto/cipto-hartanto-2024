@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import AnchorLink from '@/components/AnchorLink'
 import { FRAMER_SUB_SECTION_ANIMATION } from '@/constants/framerAnimations'
@@ -17,7 +17,23 @@ export default function Hero({
 }: HeroProps) {
   const refHero = useRef<null | HTMLElement>(null)
 
+  const [textId, setTextId] = useState(0)
+
   const { subtitle } = componentData
+
+  const TEST =
+    'building websites with modular markup and SCSS, creating beautiful landing pages, web development with excellent communication skills, working with international clients, being humble and delivering excellent work'
+
+  useEffect(() => {
+    const arrayLength = TEST.split(',').length
+    const updateTextId = setInterval(() => {
+      setTextId((prevValue) => {
+        if (prevValue < arrayLength - 1) return prevValue + 1
+        return 0
+      })
+    }, 5000)
+    return () => clearTimeout(updateTextId)
+  }, [])
 
   return (
     <section className="hero" ref={refHero}>
@@ -49,6 +65,9 @@ export default function Hero({
             viewport={{ ...FRAMER_SUB_SECTION_ANIMATION.viewport, once: false }}
           >
             {textYearsOfExperience} of
+            <motion.div>
+              {TEST.split(',').sort(() => 0.5 - Math.random())[textId]}
+            </motion.div>
           </motion.h3>
           <AnchorLink
             href="/resume"
