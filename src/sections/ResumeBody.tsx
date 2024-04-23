@@ -18,11 +18,23 @@ export default function ResumeBody({ componentData }: ResumeBodyProps) {
     <div className="resumeBody">
       <div className="resumeBody-wrapper">
         <div className="resumeBody-wrapperTop">
-          <AnchorLink href="../">
+          <AnchorLink
+            href="../"
+            gaContent={{
+              event: 'clickedTrademark',
+              value: 'Going back to home from Resume.',
+            }}
+          >
             <Trademark />
           </AnchorLink>
           <div className="resumeBody-iconPdf">
-            <AnchorLink href={pdfUrl}>
+            <AnchorLink
+              href={pdfUrl}
+              gaContent={{
+                event: 'clickedDownloadPdf',
+                value: 'Downloaded a PDF!',
+              }}
+            >
               <span className="resumeBody-iconPdfText">PDF</span>
             </AnchorLink>
           </div>

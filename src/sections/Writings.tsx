@@ -99,7 +99,13 @@ export default function Writings({
                     once: false,
                   }}
                 >
-                  <AnchorLink href={`/writings/${item.slug}`}>
+                  <AnchorLink
+                    href={`/writings/${item.slug}`}
+                    gaContent={{
+                      event: 'clickedArticleItem',
+                      value: item.title,
+                    }}
+                  >
                     <ArticleItem componentData={{ ...item }} />
                   </AnchorLink>
                 </motion.li>

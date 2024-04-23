@@ -44,7 +44,13 @@ export default function Hero({ componentData }: { componentData: HeroProps }) {
           >
             {caption}
           </motion.h3>
-          <AnchorLink href="/resume">
+          <AnchorLink
+            href="/resume"
+            gaContent={{
+              event: 'clickedHeroCta',
+              value: 'Checking out Resume page.',
+            }}
+          >
             <motion.span
               className="hero-link"
               {...FRAMER_SUB_SECTION_ANIMATION}

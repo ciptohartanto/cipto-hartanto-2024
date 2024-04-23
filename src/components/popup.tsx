@@ -86,7 +86,13 @@ export default function Popup({
                   </ul>
                   <div className="popup-wrapperDescription">
                     <span className="popup-description">{date}</span>
-                    <AnchorLink href={projectUrl}>
+                    <AnchorLink
+                      href={projectUrl}
+                      gaContent={{
+                        event: 'clickedPopupExternalLink',
+                        value: projectUrl,
+                      }}
+                    >
                       <span className="popup-externalLink">{projectUrl}</span>
                     </AnchorLink>
                   </div>

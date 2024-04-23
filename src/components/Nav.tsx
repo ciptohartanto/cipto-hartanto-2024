@@ -107,7 +107,13 @@ export default function Nav() {
                       }}
                       onClick={() => setIsFolded(true)}
                     >
-                      <AnchorLink href={item.link}>
+                      <AnchorLink
+                        href={item.link}
+                        gaContent={{
+                          event: 'clickedNavItem',
+                          value: item.text,
+                        }}
+                      >
                         <span className="nav-text">{item.text}</span>
                       </AnchorLink>
                     </motion.li>
