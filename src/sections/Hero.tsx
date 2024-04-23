@@ -6,12 +6,18 @@ import { FRAMER_SUB_SECTION_ANIMATION } from '@/constants/framerAnimations'
 import Trademark from '@/elements/Trademark'
 import { SectionHero } from '@/gql/graphql'
 
-type HeroProps = Pick<SectionHero, 'subtitle' | 'caption'>
+type HeroProps = {
+  componentData: Pick<SectionHero, 'subtitle' | 'caption'>
+  textYearsOfExperience: string
+}
 
-export default function Hero({ componentData }: { componentData: HeroProps }) {
+export default function Hero({
+  componentData,
+  textYearsOfExperience,
+}: HeroProps) {
   const refHero = useRef<null | HTMLElement>(null)
 
-  const { subtitle, caption } = componentData
+  const { subtitle } = componentData
 
   return (
     <section className="hero" ref={refHero}>
@@ -42,7 +48,7 @@ export default function Hero({ componentData }: { componentData: HeroProps }) {
             }}
             viewport={{ ...FRAMER_SUB_SECTION_ANIMATION.viewport, once: false }}
           >
-            {caption}
+            {textYearsOfExperience} of
           </motion.h3>
           <AnchorLink
             href="/resume"

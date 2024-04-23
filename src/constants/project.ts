@@ -51,3 +51,5 @@ export const PAGE_TITLE = {
   resume: 'Résumé',
   home: 'Home',
 }
+
+export const STARTING_PROFESSIONAL_TIME = new Date('2016-05-15')
