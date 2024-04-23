@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import AnchorLink from '@/components/AnchorLink'
 import { FRAMER_SUB_SECTION_ANIMATION } from '@/constants/framerAnimations'
@@ -19,21 +19,26 @@ export default function Hero({
 
   const [textId, setTextId] = useState(0)
 
-  const { subtitle } = componentData
+  const { subtitle, caption } = componentData
 
-  const TEST =
-    'building websites with modular markup and SCSS, creating beautiful landing pages, web development with excellent communication skills, working with international clients, being humble and delivering excellent work'
+  const memoCaption = useMemo(() => {
+    return caption.split(',').sort(() => 0.5 - Math.random())
+  }, [caption])
+
+  const memoCaptionCharacterArray = useMemo(() => {
+    return memoCaption[textId].trim().split('')
+  }, [memoCaption, textId])
 
   useEffect(() => {
-    const arrayLength = TEST.split(',').length
+    const arrayLength = caption.split(',').length
     const updateTextId = setInterval(() => {
       setTextId((prevValue) => {
         if (prevValue < arrayLength - 1) return prevValue + 1
         return 0
       })
-    }, 5000)
+    }, 6000)
     return () => clearTimeout(updateTextId)
-  }, [])
+  }, [caption])
 
   return (
     <section className="hero" ref={refHero}>
@@ -63,11 +68,41 @@ export default function Hero({
               },
             }}
             viewport={{ ...FRAMER_SUB_SECTION_ANIMATION.viewport, once: false }}
+            data-title={`${textYearsOfExperience} ${memoCaption[textId]}`}
           >
-            {textYearsOfExperience} of
-            <motion.div>
-              {TEST.split(',').sort(() => 0.5 - Math.random())[textId]}
-            </motion.div>
+            <span>{textYearsOfExperience} of</span>
+            &nbsp;
+            <AnimatePresence mode="wait">
+              {memoCaptionCharacterArray.map((item, idx) => (
+                <motion.span
+                  key={`${textId}${item}${idx}`}
+                  initial={{
+                    y: 5,
+                    opacity: 0,
+                    height: 0,
+                    filter: 'blur(1px)',
+                  }}
+                  animate={{
+                    y: 0,
+                    opacity: 1,
+                    transition: { delay: 0.02 * idx + 1 },
+                    height: 'auto',
+                    filter: 'blur(0)',
+                  }}
+                  exit={{
+                    y: -8,
+                    opacity: 0,
+                    transition: {
+                      delay: 0.01 * (memoCaptionCharacterArray.length - idx),
+                    },
+                    filter: 'blur(1.3px)',
+                    height: 0,
+                  }}
+                >
+                  {item}
+                </motion.span>
+              ))}
+            </AnimatePresence>
           </motion.h3>
           <AnchorLink
             href="/resume"
