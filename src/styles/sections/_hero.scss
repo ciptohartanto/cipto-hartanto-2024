@@ -19,9 +19,15 @@
   }
 
   &-caption {
-    @extend %typography-section-description;
+    @extend %typography-section-description, %inline-flex, %flex-start-row;
 
     margin-bottom: 5px;
+    transition: 0.3s $transition-style height;
+    white-space: break-spaces;
+
+    @include mobile-view {
+      width: 370px;
+    }
   }
 
   &-link {

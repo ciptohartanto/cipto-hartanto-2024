@@ -7,15 +7,17 @@ import { Resume as ResumePageProps, ResumeQuery } from '@/gql/graphql'
 import Layout from '@/layout/Layout'
 import QUERY_RESUME from '@/queries/queryResume'
 import ResumeBody from '@/sections/ResumeBody'
+import getExperienceYears from '@/utils/getExperienceYears'
 
 export default function ResumePage({ resume }: { resume: ResumePageProps }) {
   const { sectionResume: resumeBodyData } = resume
+  const textExperienceYears = getExperienceYears()
 
   return (
     <>
       <PageHead
         pageTitle={PAGE_TITLE.resume}
-        metaDescription={resumeBodyData.metaDescription}
+        metaDescription={`${textExperienceYears} ${resumeBodyData.metaDescription}`}
       />
       <Layout>
         <ResumeBody componentData={resumeBodyData} />

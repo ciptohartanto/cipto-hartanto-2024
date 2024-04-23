@@ -22,7 +22,13 @@ export default function Custom404Body() {
               'custom404Body-item--home'
             )}
           >
-            <AnchorLink href="./">
+            <AnchorLink
+              href="./"
+              gaContent={{
+                event: 'clickedReturnHome404',
+                value: 'Going back to home page (from 404)',
+              }}
+            >
               <span className="custom404Body-buttonText">Home</span>
             </AnchorLink>
           </li>

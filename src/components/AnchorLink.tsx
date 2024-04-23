@@ -1,3 +1,4 @@
+import { sendGAEvent } from '@next/third-parties/google'
 import Link from 'next/link'
 import { ReactNode, useMemo } from 'react'
 
@@ -6,9 +7,18 @@ import { KEYWORD_HTTP } from '@/constants/project'
 interface AnchorLinkProps {
   href: string
   children: ReactNode
+  gaContent: {
+    event: string
+    value: string
+  }
 }
 
-export default function AnchorLink({ href, children }: AnchorLinkProps) {
+export default function AnchorLink({
+  href,
+  gaContent,
+  children,
+}: AnchorLinkProps) {
+  const { event, value } = gaContent
   const parsedLinkAttrs = useMemo(() => {
     if (href.startsWith(KEYWORD_HTTP)) {
       return {
@@ -21,7 +31,11 @@ export default function AnchorLink({ href, children }: AnchorLinkProps) {
   }, [href])
 
   return (
-    <Link href={href} {...parsedLinkAttrs}>
+    <Link
+      href={href}
+      onClick={() => sendGAEvent({ event, value })}
+      {...parsedLinkAttrs}
+    >
       {children}
     </Link>
   )

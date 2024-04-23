@@ -47,13 +47,25 @@ export default function ArticleBody({
             <TableOfContent />
             <ul className="articleBody-nav">
               <li className="articleBody-navItem  articleBody-navItem--main">
-                <AnchorLink href="../#writings">
+                <AnchorLink
+                  href="../#writings"
+                  gaContent={{
+                    event: 'clickedArticleNav',
+                    value: 'Go back to Writings section.',
+                  }}
+                >
                   <span className="articleBody-navLink">Writings</span>
                 </AnchorLink>
               </li>
               {prevArticle && (
                 <li className="articleBody-navItem articleBody-navItem--prev">
-                  <AnchorLink href={prevArticle?.slug}>
+                  <AnchorLink
+                    href={prevArticle?.slug}
+                    gaContent={{
+                      event: 'clickedArticleNav',
+                      value: `Checking previous article ${prevArticle.title}.`,
+                    }}
+                  >
                     <span className="articleBody-navLink">
                       {prevArticle?.title}
                     </span>
@@ -62,7 +74,13 @@ export default function ArticleBody({
               )}
               {nextArticle && (
                 <li className="articleBody-navItem articleBody-navItem--next">
-                  <AnchorLink href={nextArticle.slug}>
+                  <AnchorLink
+                    href={nextArticle.slug}
+                    gaContent={{
+                      event: 'clickedArticleNav',
+                      value: `Checking next article ${nextArticle.title}.`,
+                    }}
+                  >
                     <span className="articleBody-navLink">
                       {nextArticle.title}
                     </span>

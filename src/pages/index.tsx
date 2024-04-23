@@ -18,6 +18,7 @@ import AboutTheWebsite from '@/sections/AboutTheWebsite'
 import Hero from '@/sections/Hero'
 import Projects from '@/sections/Projects'
 import Writings from '@/sections/Writings'
+import getExperienceYears from '@/utils/getExperienceYears'
 
 export default function HomePage({
   home,
@@ -37,11 +38,19 @@ export default function HomePage({
     sectionAbout: aboutContent,
   } = home
 
+  const textExperienceYears = getExperienceYears()
+
   return (
     <>
-      <PageHead pageTitle={PAGE_TITLE.home} metaDescription={metaDescription} />
+      <PageHead
+        pageTitle={PAGE_TITLE.home}
+        metaDescription={`${textExperienceYears} ${metaDescription}`}
+      />
       <Layout>
-        <Hero componentData={heroContent} />
+        <Hero
+          componentData={heroContent}
+          textYearsOfExperience={textExperienceYears}
+        />
         <Projects
           handleClick={(val) => {
             setIsPopupActive(val)

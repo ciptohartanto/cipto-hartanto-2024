@@ -1,17 +1,44 @@
-import { motion } from 'framer-motion'
-import { useRef } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import AnchorLink from '@/components/AnchorLink'
 import { FRAMER_SUB_SECTION_ANIMATION } from '@/constants/framerAnimations'
 import Trademark from '@/elements/Trademark'
 import { SectionHero } from '@/gql/graphql'
 
-type HeroProps = Pick<SectionHero, 'subtitle' | 'caption'>
+type HeroProps = {
+  componentData: Pick<SectionHero, 'subtitle' | 'caption'>
+  textYearsOfExperience: string
+}
 
-export default function Hero({ componentData }: { componentData: HeroProps }) {
+export default function Hero({
+  componentData,
+  textYearsOfExperience,
+}: HeroProps) {
   const refHero = useRef<null | HTMLElement>(null)
 
+  const [textId, setTextId] = useState(0)
+
   const { subtitle, caption } = componentData
+
+  const memoCaption = useMemo(() => {
+    return caption.split(',').sort(() => 0.5 - Math.random())
+  }, [caption])
+
+  const memoCaptionCharacterArray = useMemo(() => {
+    return memoCaption[textId].trim().split('')
+  }, [memoCaption, textId])
+
+  useEffect(() => {
+    const arrayLength = caption.split(',').length
+    const updateTextId = setInterval(() => {
+      setTextId((prevValue) => {
+        if (prevValue < arrayLength - 1) return prevValue + 1
+        return 0
+      })
+    }, 6000)
+    return () => clearTimeout(updateTextId)
+  }, [caption])
 
   return (
     <section className="hero" ref={refHero}>
@@ -41,10 +68,49 @@ export default function Hero({ componentData }: { componentData: HeroProps }) {
               },
             }}
             viewport={{ ...FRAMER_SUB_SECTION_ANIMATION.viewport, once: false }}
+            data-title={`${textYearsOfExperience} ${memoCaption[textId]}`}
           >
-            {caption}
+            <span>{textYearsOfExperience} of</span>
+            &nbsp;
+            <AnimatePresence mode="wait">
+              {memoCaptionCharacterArray.map((item, idx) => (
+                <motion.span
+                  key={`${textId}${item}${idx}`}
+                  initial={{
+                    y: 5,
+                    opacity: 0,
+                    height: 0,
+                    filter: 'blur(1px)',
+                  }}
+                  animate={{
+                    y: 0,
+                    opacity: 1,
+                    transition: { delay: 0.02 * idx + 1 },
+                    height: 'auto',
+                    filter: 'blur(0)',
+                  }}
+                  exit={{
+                    y: -8,
+                    opacity: 0,
+                    transition: {
+                      delay: 0.01 * (memoCaptionCharacterArray.length - idx),
+                    },
+                    filter: 'blur(1.3px)',
+                    height: 0,
+                  }}
+                >
+                  {item}
+                </motion.span>
+              ))}
+            </AnimatePresence>
           </motion.h3>
-          <AnchorLink href="/resume">
+          <AnchorLink
+            href="/resume"
+            gaContent={{
+              event: 'clickedHeroCta',
+              value: 'Checking out Resume page.',
+            }}
+          >
             <motion.span
               className="hero-link"
               {...FRAMER_SUB_SECTION_ANIMATION}
