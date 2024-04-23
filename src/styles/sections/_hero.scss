@@ -1,5 +1,8 @@
 .hero {
   @extend %section-wrapper, %flex-center;
+  @include mobile-view {
+    margin-top: unset;
+  }
 
   &-row {
     @extend %grid-wrapper;
