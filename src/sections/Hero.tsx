@@ -5,6 +5,7 @@ import AnchorLink from '@/components/AnchorLink'
 import { FRAMER_SUB_SECTION_ANIMATION } from '@/constants/framerAnimations'
 import Trademark from '@/elements/Trademark'
 import { SectionHero } from '@/gql/graphql'
+import textToArray from '@/utils/textToArray'
 
 type HeroProps = {
   componentData: Pick<SectionHero, 'subtitle' | 'caption'>
@@ -22,7 +23,7 @@ export default function Hero({
   const { subtitle, caption } = componentData
 
   const memoCaption = useMemo(() => {
-    return caption.split(',').sort(() => 0.5 - Math.random())
+    return textToArray(caption).sort(() => 0.5 - Math.random())
   }, [caption])
 
   const memoCaptionCharacterArray = useMemo(() => {
@@ -30,7 +31,7 @@ export default function Hero({
   }, [memoCaption, textId])
 
   useEffect(() => {
-    const arrayLength = caption.split(',').length
+    const arrayLength = textToArray(caption).length
     const updateTextId = setInterval(() => {
       setTextId((prevValue) => {
         if (prevValue < arrayLength - 1) return prevValue + 1

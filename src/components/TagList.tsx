@@ -1,4 +1,5 @@
 import Tag from '@/elements/Tag'
+import textToArray from '@/utils/textToArray'
 
 type TagListProps = {
   customListCSS: string
@@ -13,7 +14,7 @@ export default function TagList({
 }: TagListProps) {
   return (
     <ul className={customListCSS}>
-      {tagArrayText.split(',').map((item) => (
+      {textToArray(tagArrayText).map((item) => (
         <li key={item} className={customItemCss}>
           <Tag text={item} />
         </li>

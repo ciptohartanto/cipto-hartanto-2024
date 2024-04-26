@@ -9,6 +9,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 
 import Tag from '@/elements/Tag'
 import { SectionProject } from '@/gql/graphql'
+import textToArray from '@/utils/textToArray'
 
 type ProjectsProps = {
   handleClick: (val: boolean) => void
@@ -155,7 +156,7 @@ export default function Projects({
                         {item.date}
                       </motion.span>
                       <ul className="projects-swiperTags">
-                        {item.tags.split(',').map((tagText, idx) => (
+                        {textToArray(item.tags).map((tagText, idx) => (
                           <motion.li
                             className="projects-swiperTag"
                             key={tagText}
