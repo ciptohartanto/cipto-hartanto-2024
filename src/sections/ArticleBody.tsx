@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import AnchorLink from '@/components/AnchorLink'
 import MarkdownProcessor from '@/components/MarkdownProcessor'
 import TableOfContent from '@/components/TableOfContent'
-import Tag from '@/elements/Tag'
+import TagList from '@/components/TagList'
 import { Writing } from '@/gql/graphql'
 import formatDate from '@/utils/formatDate'
 
@@ -33,13 +33,13 @@ export default function ArticleBody({
         <div className="articleBody-wrapperTop">
           <h2 className="articleBody-title">{title}</h2>
           <span>Published on {formatDate(publishTime)}</span>
-          <ul className="articleBody-wrapperTags">
-            {tags.split(',').map((text) => (
-              <li key={text} className="articleBody-tag">
-                <Tag text={text} />
-              </li>
-            ))}
-          </ul>
+          {tags && (
+            <TagList
+              customListCSS="articleBody-wrapperTags"
+              customItemCss="articleBody-tag"
+              tagArrayText={tags}
+            />
+          )}
         </div>
 
         <div className="articleBody-wrapperBottom">
