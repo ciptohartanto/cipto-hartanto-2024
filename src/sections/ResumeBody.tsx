@@ -1,6 +1,6 @@
 import AnchorLink from '@/components/AnchorLink'
 import ExperienceItem, {
-  ExPerienceItemTypes,
+  ExperienceItemTypes,
 } from '@/components/ExperienceItem'
 import SubSection from '@/components/SubSection'
 import Trademark from '@/elements/Trademark'
@@ -73,8 +73,8 @@ export default function ResumeBody({ componentData }: ResumeBodyProps) {
                           }
                           type={
                             idx === 0
-                              ? ExPerienceItemTypes.CURRENT
-                              : ExPerienceItemTypes.PREVIOUS
+                              ? ExperienceItemTypes.CURRENT
+                              : ExperienceItemTypes.PREVIOUS
                           }
                           componentData={experienceItemData}
                         />

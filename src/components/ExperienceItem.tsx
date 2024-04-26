@@ -3,13 +3,13 @@ import classNames from 'classnames'
 import Tag from '@/elements/Tag'
 import { ExperienceItem as ExperienceItemDataProps } from '@/gql/graphql'
 
-export enum ExPerienceItemTypes {
+export enum ExperienceItemTypes {
   PREVIOUS = 'previous',
   CURRENT = 'current',
 }
 
 type ExperienceItemProps = {
-  type: ExPerienceItemTypes
+  type: ExperienceItemTypes
   isLastItem: boolean
   componentData: ExperienceItemDataProps
 }
@@ -26,7 +26,7 @@ export default function ExperienceItem({
       className={classNames(
         'experienceItem',
         {
-          'experienceItem--previous': type === ExPerienceItemTypes.PREVIOUS,
+          'experienceItem--previous': type === ExperienceItemTypes.PREVIOUS,
         },
         { 'experienceItem--lastItem': isLastItem }
       )}
