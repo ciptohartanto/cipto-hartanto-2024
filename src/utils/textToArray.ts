@@ -1,3 +1,3 @@
-const textToArray = (text: string) => text.split('')
+const textToArray = (text: string) => text.split(',')
 
 export default textToArray
