@@ -48,7 +48,15 @@ export default function Hero({
     <section className="hero" ref={refHero}>
       <div className="hero-row">
         <div className="hero-colWrapper">
-          <Trademark />
+          <AnchorLink
+            gaContent={{
+              event: 'clickedNavItem',
+              value: 'stayed',
+            }}
+            href="./"
+          >
+            <Trademark />
+          </AnchorLink>
           <motion.h2
             className="hero-subtitle"
             {...FRAMER_SUB_SECTION_ANIMATION}

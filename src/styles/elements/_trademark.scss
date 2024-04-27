@@ -1,12 +1,37 @@
-.trademark {
-  @extend %inline-flex, %flex-center;
+$name: '.trademark';
 
+#{$name} {
   position: relative;
-  width: 139px;
-  height: 82px;
-  @include desktop-view {
-    width: 183px;
-    height: 104px;
+
+  &-wrapper {
+    @extend %inline-flex, %flex-center;
+
+    position: relative;
+    width: 139px;
+    height: 82px;
+    @include desktop-view {
+      z-index: 1;
+      width: 183px;
+      height: 104px;
+      transform-style: preserve-3d;
+      cursor: pointer;
+    }
+
+    &--shadow1 {
+      position: absolute;
+      z-index: -2;
+      top: 0;
+      left: 0;
+      color: $select-highlight-background;
+    }
+
+    &--shadow2 {
+      position: absolute;
+      z-index: -1;
+      top: 0;
+      left: 0;
+      color: #7725f2;
+    }
   }
 
   &-line1 {
@@ -15,8 +40,21 @@
     position: absolute;
     top: 5px;
     left: 0;
+    transform: translateZ(10px);
+    transform-style: preserve-3d;
+    color: inherit;
     line-height: 1em;
     text-transform: uppercase;
+
+    #{$name}-wrapper--shadow1 & {
+      transform: translateZ(-5px);
+      transform-style: preserve-3d;
+    }
+
+    #{$name}-wrapper--shadow2 & {
+      transform: translateZ(4px);
+      transform-style: preserve-3d;
+    }
   }
 
   &-line2 {
@@ -25,7 +63,20 @@
     position: absolute;
     bottom: 5px;
     left: 0;
+    transform: translateZ(15px);
+    transform-style: preserve-3d;
+    color: inherit;
     line-height: 1em;
     text-transform: uppercase;
+
+    #{$name}-wrapper--shadow1 & {
+      transform: translateZ(8px);
+      transform-style: preserve-3d;
+    }
+
+    #{$name}-wrapper--shadow2 & {
+      transform: translateZ(12px);
+      transform-style: preserve-3d;
+    }
   }
 }
