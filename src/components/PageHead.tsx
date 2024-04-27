@@ -20,10 +20,12 @@ export default function PageHead({
   useEffect(() => {
     const desiredTitle = `${TRADEMARK_TEXT.firstLine} ${TRADEMARK_TEXT.secondLine} | ${pageTitle}`
     const updateCurrentTitle = () => {
-      if (!isWindowVisible) {
-        setCurrentTitle('miss you (っ◕‿◕)っ')
-      } else {
-        setCurrentTitle(desiredTitle)
+      if (isWindowVisible !== undefined) {
+        if (!isWindowVisible) {
+          setCurrentTitle('miss you (っ◕‿◕)っ')
+        } else {
+          setCurrentTitle(desiredTitle)
+        }
       }
     }
 

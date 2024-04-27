@@ -44,8 +44,6 @@ export default function Hero({
     return () => clearTimeout(updateTextId)
   }, [caption])
 
-  if (!isWindowVisible) return <></>
-
   return (
     <section className="hero" ref={refHero}>
       <div className="hero-row">
@@ -79,35 +77,36 @@ export default function Hero({
             <span>{textYearsOfExperience} of</span>
             &nbsp;
             <AnimatePresence mode="wait">
-              {memoCaptionCharacterArray.map((item, idx) => (
-                <motion.span
-                  key={`${textId}${item}${idx}`}
-                  initial={{
-                    y: 5,
-                    opacity: 0,
-                    height: 0,
-                    filter: 'blur(1px)',
-                  }}
-                  animate={{
-                    y: 0,
-                    opacity: 1,
-                    transition: { delay: 0.02 * idx + 1 },
-                    height: 'auto',
-                    filter: 'blur(0)',
-                  }}
-                  exit={{
-                    y: -8,
-                    opacity: 0,
-                    transition: {
-                      delay: 0.01 * (memoCaptionCharacterArray.length - idx),
-                    },
-                    filter: 'blur(1.3px)',
-                    height: 0,
-                  }}
-                >
-                  {item}
-                </motion.span>
-              ))}
+              {isWindowVisible &&
+                memoCaptionCharacterArray.map((item, idx) => (
+                  <motion.span
+                    key={`${textId}${item}${idx}`}
+                    initial={{
+                      y: 5,
+                      opacity: 0,
+                      height: 0,
+                      filter: 'blur(1px)',
+                    }}
+                    animate={{
+                      y: 0,
+                      opacity: 1,
+                      transition: { delay: 0.02 * idx + 1 },
+                      height: 'auto',
+                      filter: 'blur(0)',
+                    }}
+                    exit={{
+                      y: -8,
+                      opacity: 0,
+                      transition: {
+                        delay: 0.01 * (memoCaptionCharacterArray.length - idx),
+                      },
+                      filter: 'blur(1.3px)',
+                      height: 0,
+                    }}
+                  >
+                    {item}
+                  </motion.span>
+                ))}
             </AnimatePresence>
           </motion.h3>
           <AnchorLink
