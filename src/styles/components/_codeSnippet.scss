@@ -42,15 +42,28 @@
 
   &--inline {
     display: inline-block;
+    position: relative;
+    z-index: 2;
     margin: 0 1px;
-    padding: 1px 3px;
-    border-radius: 3px;
-    background-color: rgba($code-background, $opacity-50);
+    padding: 6px;
     color: $white;
     font-family: $code-font-family;
     font-size: 0.9em;
     line-height: 1.2em;
     vertical-align: baseline;
+
+    &::before {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      top: 50%;
+      left: 50%;
+      width: calc(100% - 2px);
+      height: calc(100% - 3px);
+      transform: translateX(-50%) translateY(-50%);
+      border-radius: 3px;
+      background-color: rgba($code-background, $opacity-50);
+    }
   }
 
   &-button {

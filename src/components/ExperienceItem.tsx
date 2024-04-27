@@ -1,15 +1,16 @@
 import classNames from 'classnames'
 
-import Tag from '@/elements/Tag'
 import { ExperienceItem as ExperienceItemDataProps } from '@/gql/graphql'
 
-export enum ExPerienceItemTypes {
+import TagList from './TagList'
+
+export enum ExperienceItemTypes {
   PREVIOUS = 'previous',
   CURRENT = 'current',
 }
 
 type ExperienceItemProps = {
-  type: ExPerienceItemTypes
+  type: ExperienceItemTypes
   isLastItem: boolean
   componentData: ExperienceItemDataProps
 }
@@ -26,7 +27,7 @@ export default function ExperienceItem({
       className={classNames(
         'experienceItem',
         {
-          'experienceItem--previous': type === ExPerienceItemTypes.PREVIOUS,
+          'experienceItem--previous': type === ExperienceItemTypes.PREVIOUS,
         },
         { 'experienceItem--lastItem': isLastItem }
       )}
@@ -41,13 +42,11 @@ export default function ExperienceItem({
           {location} | {date}
         </span>
         {tags && (
-          <ul className="experienceItem-tagList">
-            {tags.split(',').map((text) => (
-              <li className="experienceItem-tag" key={text}>
-                <Tag text={text} />
-              </li>
-            ))}
-          </ul>
+          <TagList
+            customListCSS="experienceItem-tagList"
+            customItemCss="experienceItem-tag"
+            tagArrayText={tags}
+          />
         )}
         <div
           className="experienceItem-content"

@@ -2,6 +2,7 @@ import Head from 'next/head'
 import { useEffect, useState } from 'react'
 
 import { TRADEMARK_TEXT } from '@/constants/project'
+import useVisibilityChange from '@/hooks/useVisibilityChange'
 
 interface PageHeadProps {
   pageTitle: string
@@ -14,23 +15,23 @@ export default function PageHead({
 }: PageHeadProps) {
   const [currentTitle, setCurrentTitle] = useState('')
 
+  const isWindowVisible = useVisibilityChange()
+
   useEffect(() => {
     const desiredTitle = `${TRADEMARK_TEXT.firstLine} ${TRADEMARK_TEXT.secondLine} | ${pageTitle}`
     const updateCurrentTitle = () => {
-      if (document.visibilityState === 'hidden') {
-        setCurrentTitle('miss you (っ◕‿◕)っ')
-      } else {
-        setCurrentTitle(desiredTitle)
+      if (isWindowVisible !== undefined) {
+        if (!isWindowVisible) {
+          setCurrentTitle('miss you (っ◕‿◕)っ')
+        } else {
+          setCurrentTitle(desiredTitle)
+        }
       }
     }
 
     updateCurrentTitle()
+  }, [pageTitle, isWindowVisible])
 
-    document.addEventListener('visibilitychange', updateCurrentTitle)
-
-    return () =>
-      document.removeEventListener('visibilitychange', updateCurrentTitle)
-  }, [pageTitle])
   return (
     <Head>
       <title>{currentTitle}</title>

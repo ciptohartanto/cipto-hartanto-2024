@@ -2,11 +2,11 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect } from 'react'
 
 import IconX, { IconXTypes } from '@/elements/IconX'
-import Tag from '@/elements/Tag'
 import { ProjectItem } from '@/gql/graphql'
 
 import AnchorLink from './AnchorLink'
 import MarkdownProcessor from './MarkdownProcessor'
+import TagList from './TagList'
 
 export type PopupContentProp = {
   componentData: Pick<
@@ -77,13 +77,14 @@ export default function Popup({
                 />
                 <div className="popup-content" data-lenis-prevent>
                   <h3 className="popup-title">{title}</h3>
-                  <ul className="popup-wrapperTags">
-                    {tags.split(',').map((text) => (
-                      <li key={text} className="popup-tag">
-                        <Tag text={text} />
-                      </li>
-                    ))}
-                  </ul>
+                  {tags && (
+                    <TagList
+                      customListCSS="popup-wrapperTags"
+                      customItemCss="popup-tag"
+                      tagArrayText={tags}
+                    />
+                  )}
+
                   <div className="popup-wrapperDescription">
                     <span className="popup-description">{date}</span>
                     <AnchorLink

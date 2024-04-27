@@ -5,6 +5,8 @@ import AnchorLink from '@/components/AnchorLink'
 import { FRAMER_SUB_SECTION_ANIMATION } from '@/constants/framerAnimations'
 import Trademark from '@/elements/Trademark'
 import { SectionHero } from '@/gql/graphql'
+import useVisibilityChange from '@/hooks/useVisibilityChange'
+import textToArray from '@/utils/textToArray'
 
 type HeroProps = {
   componentData: Pick<SectionHero, 'subtitle' | 'caption'>
@@ -19,10 +21,12 @@ export default function Hero({
 
   const [textId, setTextId] = useState(0)
 
+  const isWindowVisible = useVisibilityChange()
+
   const { subtitle, caption } = componentData
 
   const memoCaption = useMemo(() => {
-    return caption.split(',').sort(() => 0.5 - Math.random())
+    return textToArray(caption).sort(() => 0.5 - Math.random())
   }, [caption])
 
   const memoCaptionCharacterArray = useMemo(() => {
@@ -30,7 +34,7 @@ export default function Hero({
   }, [memoCaption, textId])
 
   useEffect(() => {
-    const arrayLength = caption.split(',').length
+    const arrayLength = textToArray(caption).length
     const updateTextId = setInterval(() => {
       setTextId((prevValue) => {
         if (prevValue < arrayLength - 1) return prevValue + 1
@@ -44,7 +48,15 @@ export default function Hero({
     <section className="hero" ref={refHero}>
       <div className="hero-row">
         <div className="hero-colWrapper">
-          <Trademark />
+          <AnchorLink
+            gaContent={{
+              event: 'clickedNavItem',
+              value: 'stayed',
+            }}
+            href="./"
+          >
+            <Trademark />
+          </AnchorLink>
           <motion.h2
             className="hero-subtitle"
             {...FRAMER_SUB_SECTION_ANIMATION}
@@ -73,35 +85,36 @@ export default function Hero({
             <span>{textYearsOfExperience} of</span>
             &nbsp;
             <AnimatePresence mode="wait">
-              {memoCaptionCharacterArray.map((item, idx) => (
-                <motion.span
-                  key={`${textId}${item}${idx}`}
-                  initial={{
-                    y: 5,
-                    opacity: 0,
-                    height: 0,
-                    filter: 'blur(1px)',
-                  }}
-                  animate={{
-                    y: 0,
-                    opacity: 1,
-                    transition: { delay: 0.02 * idx + 1 },
-                    height: 'auto',
-                    filter: 'blur(0)',
-                  }}
-                  exit={{
-                    y: -8,
-                    opacity: 0,
-                    transition: {
-                      delay: 0.01 * (memoCaptionCharacterArray.length - idx),
-                    },
-                    filter: 'blur(1.3px)',
-                    height: 0,
-                  }}
-                >
-                  {item}
-                </motion.span>
-              ))}
+              {isWindowVisible &&
+                memoCaptionCharacterArray.map((item, idx) => (
+                  <motion.span
+                    key={`${textId}${item}${idx}`}
+                    initial={{
+                      y: 5,
+                      opacity: 0,
+                      height: 0,
+                      filter: 'blur(1px)',
+                    }}
+                    animate={{
+                      y: 0,
+                      opacity: 1,
+                      transition: { delay: 0.02 * idx + 1 },
+                      height: 'auto',
+                      filter: 'blur(0)',
+                    }}
+                    exit={{
+                      y: -8,
+                      opacity: 0,
+                      transition: {
+                        delay: 0.01 * (memoCaptionCharacterArray.length - idx),
+                      },
+                      filter: 'blur(1.3px)',
+                      height: 0,
+                    }}
+                  >
+                    {item}
+                  </motion.span>
+                ))}
             </AnimatePresence>
           </motion.h3>
           <AnchorLink
