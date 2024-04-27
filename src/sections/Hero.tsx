@@ -5,6 +5,7 @@ import AnchorLink from '@/components/AnchorLink'
 import { FRAMER_SUB_SECTION_ANIMATION } from '@/constants/framerAnimations'
 import Trademark from '@/elements/Trademark'
 import { SectionHero } from '@/gql/graphql'
+import useVisibilityChange from '@/hooks/useVisibilityChange'
 import textToArray from '@/utils/textToArray'
 
 type HeroProps = {
@@ -19,6 +20,8 @@ export default function Hero({
   const refHero = useRef<null | HTMLElement>(null)
 
   const [textId, setTextId] = useState(0)
+
+  const isWindowVisible = useVisibilityChange()
 
   const { subtitle, caption } = componentData
 
@@ -40,6 +43,8 @@ export default function Hero({
     }, 6000)
     return () => clearTimeout(updateTextId)
   }, [caption])
+
+  if (!isWindowVisible) return <></>
 
   return (
     <section className="hero" ref={refHero}>
