@@ -22,19 +22,10 @@
     }
   }
 
-  code {
+  code[class*='language'] {
     @include mobile-view {
       padding-right: 30px !important;
       float: left;
-      font-size: 11px !important;
-    }
-    @include desktop-view {
-      font-size: 12px !important;
-    }
-  }
-
-  .token {
-    @include mobile-view {
       font-size: 11px !important;
     }
     @include desktop-view {
