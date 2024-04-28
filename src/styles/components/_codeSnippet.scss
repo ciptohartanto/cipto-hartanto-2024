@@ -21,26 +21,23 @@
   }
 
   code[class*='language'] {
-    @include mobile-view {
-      padding-right: 30px !important;
-      float: left;
+    padding-right: 30px !important;
+    float: left;
+
+    span {
       font-size: 0.61em !important;
-    }
-    @include desktop-view {
-      font-size: 12px !important;
+      line-height: 1.2em;
+
+      @include desktop-view {
+        font-size: 12px !important;
+        line-height: 1.6em;
+      }
     }
   }
 
   .linenumber {
     &:last-of-type {
       display: none !important;
-    }
-  }
-
-  span {
-    line-height: 1.2em;
-    @include desktop-view {
-      line-height: 1.6em;
     }
   }
 
