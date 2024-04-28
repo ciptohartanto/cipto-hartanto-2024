@@ -6,7 +6,6 @@ export default function useVisibilityChange() {
   )
 
   useEffect(() => {
-    console.log(document.visibilityState)
     const updateIsWindowVisible = () => {
       setIsWindowVisible(document.visibilityState === 'visible')
     }

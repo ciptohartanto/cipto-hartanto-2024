@@ -57,7 +57,6 @@ export default function Trademark() {
     setDisplayShadow(false)
   }
 
-  console.log(displayShadow)
   return (
     <div
       className="trademark"
