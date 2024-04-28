@@ -14,7 +14,7 @@
     width: 100%;
     @include mobile-view {
       padding-top: 40px !important;
-      font-size: 1em !important;
+      font-size: 12px !important;
     }
     @include desktop-view {
       padding-top: 30px !important;
@@ -26,9 +26,6 @@
     @include mobile-view {
       padding-right: 30px !important;
       float: left;
-      font-size: 0.57em !important;
-    }
-    @include desktop-view {
       font-size: 12px !important;
     }
   }
@@ -45,12 +42,17 @@
     position: relative;
     z-index: 2;
     margin: 0 1px;
-    padding: 6px;
+    padding: 3px;
     color: $white;
     font-family: $code-font-family;
     font-size: 0.9em;
+    letter-spacing: -0.005em;
     line-height: 1.2em;
     vertical-align: baseline;
+    @include desktop-view {
+      padding: 4px;
+      font-size: 0.8em;
+    }
 
     &::before {
       content: '';
@@ -62,7 +64,7 @@
       height: calc(100% - 3px);
       transform: translateX(-50%) translateY(-50%);
       border-radius: 3px;
-      background-color: rgba($code-background, $opacity-50);
+      background-color: rgba($code-background, $opacity-40);
     }
   }
 

@@ -14,7 +14,11 @@
     &Top {
       @extend %full-flex, %flex-start-column, %col-mobile--6, %col-desktop--12;
 
-      margin-bottom: 40px;
+      @include desktop-view {
+        position: sticky;
+        top: 80px;
+        margin-bottom: 40px;
+      }
     }
 
     &Bottom {
@@ -33,7 +37,7 @@
 
       @include desktop-view {
         position: sticky;
-        top: 100px;
+        top: 220px;
         order: 1;
         padding: 20px;
         border-radius: 10px;
@@ -62,11 +66,23 @@
     @include items-spacer($mobile: 10px, $desktop: 10px, $direction: 'right');
   }
 
+  &-header {
+    @extend %inline-flex, %flex-start-column;
+
+    @include mobile-view {
+      margin-top: 40px;
+    }
+
+    margin-bottom: 40px;
+  }
+
   &-section {
     @extend %markdown-list-style;
 
+    width: 100%;
+
     h3 {
-      @extend %typography-section-title-normal;
+      @extend %typography-section-subtitle;
 
       margin-top: -20px;
       padding-top: 80px;
@@ -76,7 +92,7 @@
       }
 
       + * {
-        margin-top: 32px;
+        margin-top: 22px;
       }
     }
 
@@ -84,7 +100,10 @@
       @extend %typography-card-title;
 
       + * {
-        margin-top: 18px;
+        margin-top: 12px;
+        @include desktop-view {
+          margin-top: 10px;
+        }
       }
     }
 
