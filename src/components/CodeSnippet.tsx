@@ -14,6 +14,7 @@ const customStyle = {
   lineHeight: '1.2',
   borderRadius: '10px',
   padding: '10px 60px 10px 10px',
+  fontSize: 'inherit',
 }
 
 export default function CodeSnippet({ content, lang }: CodeSnippetProps) {
