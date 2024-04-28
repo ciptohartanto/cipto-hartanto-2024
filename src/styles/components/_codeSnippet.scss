@@ -20,7 +20,7 @@
     }
   }
 
-  code[class*='language'] {
+  code[class^='language'] {
     padding-right: 30px !important;
     float: left;
 
