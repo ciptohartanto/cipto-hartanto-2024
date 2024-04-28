@@ -65,12 +65,12 @@ export default function Trademark() {
       onMouseEnter={() => setDisplayShadow(true)}
       onMouseLeave={handleMouseLeave}
     >
-      <motion.div className="trademark-wrapper" style={{ rotateX, rotateY }}>
+      <motion.h1 className="trademark-wrapper" style={{ rotateX, rotateY }}>
         <span className="trademark-line1">{TRADEMARK_TEXT.firstLine}</span>
 
         <span className="trademark-line2">{TRADEMARK_TEXT.secondLine}</span>
-      </motion.div>
-      <AnimatePresence key="shadow2">
+      </motion.h1>
+      <AnimatePresence key="shadow1">
         {displayShadow && (
           <motion.div
             className="trademark-wrapper trademark-wrapper--shadow1"
