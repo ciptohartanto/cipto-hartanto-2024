@@ -1,9 +1,8 @@
-import classNames from 'classnames'
-
 import AnchorLink from '@/components/AnchorLink'
 import MarkdownProcessor from '@/components/MarkdownProcessor'
 import TableOfContent from '@/components/TableOfContent'
 import TagList from '@/components/TagList'
+import Trademark from '@/elements/Trademark'
 import { Writing } from '@/gql/graphql'
 import formatDate from '@/utils/formatDate'
 
@@ -31,15 +30,7 @@ export default function ArticleBody({
     <div className="articleBody">
       <div className="articleBody-wrapper">
         <div className="articleBody-wrapperTop">
-          <h2 className="articleBody-title">{title}</h2>
-          <span>Published on {formatDate(publishTime)}</span>
-          {tags && (
-            <TagList
-              customListCSS="articleBody-wrapperTags"
-              customItemCss="articleBody-tag"
-              tagArrayText={tags}
-            />
-          )}
+          <Trademark />
         </div>
 
         <div className="articleBody-wrapperBottom">
@@ -89,13 +80,21 @@ export default function ArticleBody({
               )}
             </ul>
           </div>
-          <div
-            className={classNames(
-              'articleBody-wrapperSection',
-              'articleBody-section'
-            )}
-          >
-            <MarkdownProcessor mdContent={mdContent} />
+          <div className="articleBody-wrapperSection">
+            <div className="articleBody-header">
+              <h2 className="articleBody-title">{title}</h2>
+              <span>Published on {formatDate(publishTime)}</span>
+              {tags && (
+                <TagList
+                  customListCSS="articleBody-wrapperTags"
+                  customItemCss="articleBody-tag"
+                  tagArrayText={tags}
+                />
+              )}
+            </div>
+            <section className="articleBody-section">
+              <MarkdownProcessor mdContent={mdContent} />
+            </section>
           </div>
         </div>
       </div>
