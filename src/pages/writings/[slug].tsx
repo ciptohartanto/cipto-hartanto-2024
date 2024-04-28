@@ -100,6 +100,6 @@ export async function getStaticProps(
   const { writing, writings } = data
   return {
     props: { writing, writings },
-    revalidate: 10,
+    revalidate: 60,
   }
 }
