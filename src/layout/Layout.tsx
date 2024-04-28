@@ -72,14 +72,12 @@ export default function Layout({ children }: { children: ReactNode }) {
                 exit="hide"
                 variants={{
                   hide: {
-                    width: '100vw',
+                    width: isMobile ? 'calc(100vw - 70px)' : '100vw',
                     transition: { duration: 0.3 },
                   },
                   animate: {
-                    width: isMobile
-                      ? 'calc(100vw - 20px)'
-                      : 'calc(100vw - 70px)',
-                    transition: { duration: 1.3 },
+                    width: isMobile ? '100vw' : 'calc(100vw - 70px)',
+                    transition: { duration: 1.3, delay: 1.5 },
                   },
                 }}
               />
