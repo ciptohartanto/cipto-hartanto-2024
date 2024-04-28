@@ -31,9 +31,41 @@
     @include mobile-view {
       width: 308px;
     }
+
+    &Text {
+      position: relative;
+      padding-right: 5px;
+
+      &--blinker {
+        &::after {
+          content: '_';
+          display: inline-block;
+          position: absolute;
+          right: -10px;
+          animation: blinking 2.2s linear infinite;
+        }
+      }
+    }
   }
 
   &-link {
     @extend %inline-flex, %flex-center, %link-hover, %typography-link-title;
+  }
+}
+
+@keyframes blinking {
+  0%,
+  30%,
+  50%,
+  70%,
+  90% {
+    opacity: 0;
+  }
+
+  40%,
+  60%,
+  80%,
+  100% {
+    opacity: 1;
   }
 }

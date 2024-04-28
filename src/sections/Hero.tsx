@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
@@ -20,6 +21,7 @@ export default function Hero({
   const refHero = useRef<null | HTMLElement>(null)
 
   const [textId, setTextId] = useState(0)
+  const [isBlinking, setIsBlinking] = useState(false)
 
   const isWindowVisible = useVisibilityChange()
 
@@ -43,6 +45,15 @@ export default function Hero({
     }, 6000)
     return () => clearTimeout(updateTextId)
   }, [caption])
+
+  useEffect(() => {
+    setIsBlinking(true)
+    const updateIsBlinking = setTimeout(() => {
+      setIsBlinking(false)
+    }, 1600)
+
+    return () => clearTimeout(updateIsBlinking)
+  }, [textId])
 
   return (
     <section className="hero" ref={refHero}>
@@ -82,8 +93,13 @@ export default function Hero({
             viewport={{ ...FRAMER_SUB_SECTION_ANIMATION.viewport, once: false }}
             data-title={`${textYearsOfExperience} ${memoCaption[textId]}`}
           >
-            <span>{textYearsOfExperience} of</span>
-            &nbsp;
+            <span
+              className={classNames('hero-captionText', {
+                'hero-captionText--blinker': isBlinking,
+              })}
+            >
+              {textYearsOfExperience} of
+            </span>
             <AnimatePresence mode="wait">
               {isWindowVisible &&
                 memoCaptionCharacterArray.map((item, idx) => (

@@ -20,18 +20,12 @@
     }
   }
 
-  code[class^='language'] {
+  code {
     padding-right: 30px !important;
     float: left;
-
-    span {
-      font-size: 0.61em !important;
-      line-height: 1.2em;
-
-      @include desktop-view {
-        font-size: 12px !important;
-        line-height: 1.6em;
-      }
+    font-size: 12px !important;
+    @include desktop-view {
+      font-size: 13px !important;
     }
   }
 

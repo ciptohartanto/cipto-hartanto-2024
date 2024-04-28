@@ -90,6 +90,6 @@ export async function getStaticProps(): Promise<
 
   return {
     props: { home, writings },
-    revalidate: 10,
+    revalidate: 60,
   }
 }
