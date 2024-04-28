@@ -70,7 +70,7 @@
   }
 
   &-text {
-    @extend %typography-section-title-normal;
+    @extend %typography-section-title-light;
 
     text-transform: uppercase;
     white-space: nowrap;
