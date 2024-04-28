@@ -37,6 +37,8 @@ export default function Trademark() {
     [-0.5, 0.5],
     ['-18.5deg', '18.5deg']
   )
+  const color1 = useTransform(mouseXSpring, [-0.5, 0.5], ['#8335ff', '#e602e2'])
+  const color2 = useTransform(mouseXSpring, [-0.5, 0.5], ['#9f64ff', '#ff61fc'])
 
   const handleMouseMove = (e: MouseEvent) => {
     const { width, height, left, top } = e.currentTarget.getBoundingClientRect()
@@ -79,9 +81,13 @@ export default function Trademark() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.1, delay: 0.1 }}
           >
-            <span className="trademark-line1">{TRADEMARK_TEXT.firstLine}</span>
+            <motion.span className="trademark-line1" style={{ color: color1 }}>
+              {TRADEMARK_TEXT.firstLine}
+            </motion.span>
 
-            <span className="trademark-line2">{TRADEMARK_TEXT.secondLine}</span>
+            <motion.span className="trademark-line2" style={{ color: color1 }}>
+              {TRADEMARK_TEXT.secondLine}
+            </motion.span>
           </motion.div>
         )}
       </AnimatePresence>
@@ -95,9 +101,13 @@ export default function Trademark() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.1, delay: 0.1 }}
           >
-            <span className="trademark-line1">{TRADEMARK_TEXT.firstLine}</span>
+            <motion.span className="trademark-line1" style={{ color: color2 }}>
+              {TRADEMARK_TEXT.firstLine}
+            </motion.span>
 
-            <span className="trademark-line2">{TRADEMARK_TEXT.secondLine}</span>
+            <motion.span className="trademark-line2" style={{ color: color2 }}>
+              {TRADEMARK_TEXT.secondLine}
+            </motion.span>
           </motion.div>
         )}
       </AnimatePresence>

@@ -30,7 +30,15 @@ export default function ArticleBody({
     <div className="articleBody">
       <div className="articleBody-wrapper">
         <div className="articleBody-wrapperTop">
-          <Trademark />
+          <AnchorLink
+            href="../"
+            gaContent={{
+              event: 'clickedTrademark',
+              value: 'Going back to home from Resume.',
+            }}
+          >
+            <Trademark />
+          </AnchorLink>
         </div>
 
         <div className="articleBody-wrapperBottom">
