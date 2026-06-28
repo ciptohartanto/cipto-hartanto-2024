@@ -1,5 +1,4 @@
-import classNames from 'classnames'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 import AnchorLink from '@/components/AnchorLink'
@@ -14,6 +13,8 @@ type HeroProps = {
   textYearsOfExperience: string
 }
 
+const TYPE_CHARACTER_INTERVAL = 80
+
 export default function Hero({
   componentData,
   textYearsOfExperience,
@@ -21,7 +22,7 @@ export default function Hero({
   const refHero = useRef<null | HTMLElement>(null)
 
   const [textId, setTextId] = useState(0)
-  const [isBlinking, setIsBlinking] = useState(false)
+  const [visibleCharacterCount, setVisibleCharacterCount] = useState(0)
 
   const isWindowVisible = useVisibilityChange()
 
@@ -31,9 +32,22 @@ export default function Hero({
     return textToArray(caption).sort(() => 0.5 - Math.random())
   }, [caption])
 
-  const memoCaptionCharacterArray = useMemo(() => {
-    return memoCaption[textId].trim().split('')
-  }, [memoCaption, textId])
+  useEffect(() => {
+    setTextId((prevValue) => {
+      if (memoCaption.length === 0) return 0
+      if (prevValue < memoCaption.length) return prevValue
+      return 0
+    })
+  }, [memoCaption.length])
+
+  const memoActiveCaption = useMemo(
+    () => memoCaption[textId] ?? '',
+    [memoCaption, textId]
+  )
+
+  const memoTypedCaption = useMemo(() => {
+    return memoActiveCaption.slice(0, visibleCharacterCount)
+  }, [memoActiveCaption, visibleCharacterCount])
 
   useEffect(() => {
     const arrayLength = textToArray(caption).length
@@ -43,17 +57,26 @@ export default function Hero({
         return 0
       })
     }, 6000)
-    return () => clearTimeout(updateTextId)
+    return () => clearInterval(updateTextId)
   }, [caption])
 
   useEffect(() => {
-    setIsBlinking(true)
-    const updateIsBlinking = setTimeout(() => {
-      setIsBlinking(false)
-    }, 1600)
+    setVisibleCharacterCount(0)
+  }, [memoActiveCaption])
 
-    return () => clearTimeout(updateIsBlinking)
-  }, [textId])
+  useEffect(() => {
+    if (!isWindowVisible) return
+    if (visibleCharacterCount >= memoActiveCaption.length) return
+
+    const typingTimeout = setTimeout(() => {
+      setVisibleCharacterCount((prevValue) => {
+        if (prevValue < memoActiveCaption.length) return prevValue + 1
+        return prevValue
+      })
+    }, TYPE_CHARACTER_INTERVAL)
+
+    return () => clearTimeout(typingTimeout)
+  }, [isWindowVisible, memoActiveCaption, visibleCharacterCount])
 
   return (
     <section className="hero" ref={refHero}>
@@ -91,47 +114,15 @@ export default function Hero({
               },
             }}
             viewport={{ ...FRAMER_SUB_SECTION_ANIMATION.viewport, once: false }}
-            data-title={`${textYearsOfExperience} ${memoCaption[textId]}`}
+            data-title={`${textYearsOfExperience} ${memoActiveCaption}`}
           >
-            <span
-              className={classNames('hero-captionText', {
-                'hero-captionText--blinker': isBlinking,
-              })}
-            >
-              {textYearsOfExperience} of
+            <span className="hero-captionText">{textYearsOfExperience} of</span>
+            <span className="hero-captionAnimatedText">
+              {isWindowVisible ? memoTypedCaption : ''}
+              <span className="hero-captionCursor" aria-hidden="true">
+                _
+              </span>
             </span>
-            <AnimatePresence mode="wait">
-              {isWindowVisible &&
-                memoCaptionCharacterArray.map((item, idx) => (
-                  <motion.span
-                    key={`${textId}${item}${idx}`}
-                    initial={{
-                      y: 5,
-                      opacity: 0,
-                      height: 0,
-                      filter: 'blur(1px)',
-                    }}
-                    animate={{
-                      y: 0,
-                      opacity: 1,
-                      transition: { delay: 0.02 * idx + 1 },
-                      height: 'auto',
-                      filter: 'blur(0)',
-                    }}
-                    exit={{
-                      y: -8,
-                      opacity: 0,
-                      transition: {
-                        delay: 0.01 * (memoCaptionCharacterArray.length - idx),
-                      },
-                      filter: 'blur(1.3px)',
-                      height: 0,
-                    }}
-                  >
-                    {item}
-                  </motion.span>
-                ))}
-            </AnimatePresence>
           </motion.h3>
           <AnchorLink
             href="/resume"
