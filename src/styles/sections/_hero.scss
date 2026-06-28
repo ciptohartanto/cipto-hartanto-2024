@@ -35,17 +35,25 @@
     &Text {
       position: relative;
       padding-right: 5px;
-
-      &--blinker {
-        &::after {
-          content: '_';
-          display: inline-block;
-          position: absolute;
-          right: -10px;
-          animation: blinking 2.2s linear infinite;
-        }
-      }
     }
+
+    &AnimatedText {
+      display: inline-flex;
+      position: relative;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      min-width: 0;
+      overflow-wrap: normal;
+      white-space: normal;
+    }
+
+    &Cursor {
+      display: inline-block;
+      margin-left: 0.02em;
+      animation: blinking 1.8s linear infinite;
+      white-space: nowrap;
+    }
+
   }
 
   &-link {
