@@ -119,7 +119,9 @@ export default function Hero({
             <span className="hero-captionText">{textYearsOfExperience} of</span>
             <span className="hero-captionAnimatedText">
               {isWindowVisible ? memoTypedCaption : ''}
-              <span className="hero-captionCursor">_</span>
+              <span className="hero-captionCursor" aria-hidden="true">
+                _
+              </span>
             </span>
           </motion.h3>
           <AnchorLink
