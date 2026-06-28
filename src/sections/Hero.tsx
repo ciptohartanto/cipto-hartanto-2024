@@ -54,18 +54,21 @@ export default function Hero({
 
   useEffect(() => {
     setVisibleCharacterCount(0)
+  }, [memoActiveCaption])
 
-    if (!isWindowVisible || !memoActiveCaption.length) return undefined
+  useEffect(() => {
+    if (!isWindowVisible) return
+    if (visibleCharacterCount >= memoActiveCaption.length) return
 
-    const typingInterval = setInterval(() => {
+    const typingTimeout = setTimeout(() => {
       setVisibleCharacterCount((prevValue) => {
         if (prevValue < memoActiveCaption.length) return prevValue + 1
         return prevValue
       })
     }, TYPE_CHARACTER_INTERVAL)
 
-    return () => clearInterval(typingInterval)
-  }, [isWindowVisible, memoActiveCaption, textId])
+    return () => clearTimeout(typingTimeout)
+  }, [isWindowVisible, memoActiveCaption, visibleCharacterCount])
 
   return (
     <section className="hero" ref={refHero}>
