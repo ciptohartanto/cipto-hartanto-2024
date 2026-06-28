@@ -75,7 +75,7 @@ export default function Popup({
                     backgroundImage: `url(${thumbnail.url})`,
                   }}
                 />
-                <div className="popup-content" data-lenis-prevent>
+                <div className="popup-content">
                   <h3 className="popup-title">{title}</h3>
                   {tags && (
                     <TagList
