@@ -32,6 +32,14 @@ export default function Hero({
     return textToArray(caption).sort(() => 0.5 - Math.random())
   }, [caption])
 
+  useEffect(() => {
+    setTextId((prevValue) => {
+      if (memoCaption.length === 0) return 0
+      if (prevValue < memoCaption.length) return prevValue
+      return 0
+    })
+  }, [memoCaption.length])
+
   const memoActiveCaption = useMemo(
     () => memoCaption[textId] ?? '',
     [memoCaption, textId]
