@@ -3,7 +3,7 @@ import 'swiper/css'
 
 import classNames from 'classnames'
 import { motion } from 'framer-motion'
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { Autoplay } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
@@ -22,16 +22,74 @@ type CustomFramerProps = {
   afterXPos: number
 }
 
+type CustomTagFramerProps = {
+  idx: number
+  total: number
+  afterXPos: number
+}
+
+const ACTIVE_THUMBNAIL_PADDING_TOP = (415 / 622) * 100
+const INACTIVE_THUMBNAIL_PADDING_TOP = (470 / 622) * 100
+
+function getSlideDirection({
+  current,
+  previous,
+  total,
+}: {
+  current: number
+  previous: number
+  total: number
+}) {
+  if (current === previous || total <= 1) return 'next'
+
+  const forwardDistance = (current - previous + total) % total
+  const backwardDistance = (previous - current + total) % total
+
+  return forwardDistance <= backwardDistance ? 'next' : 'prev'
+}
+
+function updateSlideZoom(swiper: {
+  slides: ArrayLike<HTMLElement & { progress?: number }>
+}) {
+  Array.from(swiper.slides).forEach((slideNode) => {
+    const progress = Math.min(Math.abs(slideNode.progress ?? 0), 1)
+    const focus = 1 - progress
+    const paddingTop =
+      ACTIVE_THUMBNAIL_PADDING_TOP +
+      (INACTIVE_THUMBNAIL_PADDING_TOP - ACTIVE_THUMBNAIL_PADDING_TOP) * progress
+
+    slideNode.style.setProperty('--projects-slide-focus', String(focus))
+
+    const thumbnailNode = slideNode.querySelector<HTMLElement>(
+      '.projects-swiperThumbnail'
+    )
+
+    if (thumbnailNode) {
+      thumbnailNode.style.paddingTop = `${paddingTop}%`
+    }
+  })
+}
+
 export default function Projects({
   handleClick,
   componentData,
   handleUpdatePopupData,
 }: ProjectsProps) {
-  const [currentSlideId, setCurrentSlideId] = useState(0)
-  const [swipeToLeft, setSwipeToLeft] = useState<boolean | undefined>(undefined)
+  const [currentSlideId, setCurrentSlideId] = useState(1)
+  const [isDraggingSlide, setIsDraggingSlide] = useState(false)
+  const [slideDirection, setSlideDirection] = useState<'next' | 'prev'>('next')
+  const [directionAnimationVersion, setDirectionAnimationVersion] = useState(0)
+  const previousRealIndexRef = useRef(0)
 
   const { title, listOfProjects } = componentData
   const totalSlides = listOfProjects.length
+
+  const updateDirection = (nextDirection: 'next' | 'prev') => {
+    if (slideDirection === nextDirection) return
+
+    setSlideDirection(nextDirection)
+    setDirectionAnimationVersion((prevValue) => prevValue + 1)
+  }
 
   const memoVariants = useMemo(() => {
     const animateVariants = {
@@ -47,14 +105,41 @@ export default function Projects({
       },
       hide: (custom: CustomFramerProps) => {
         return {
-          x: swipeToLeft ? custom.afterXPos : -custom.afterXPos,
+          x: slideDirection === 'next' ? custom.afterXPos : -custom.afterXPos,
           opacity: 0,
         }
       },
     }
 
     return animateVariants
-  }, [swipeToLeft])
+  }, [slideDirection])
+
+  const memoTagVariants = useMemo(() => {
+    const animateVariants = {
+      show: (custom: CustomTagFramerProps) => {
+        return {
+          x: 0,
+          opacity: 1,
+          transition: {
+            delay: 0.16 + 0.06 * custom.idx,
+            duration: 0.3,
+          },
+        }
+      },
+      hide: (custom: CustomTagFramerProps) => {
+        return {
+          x: slideDirection === 'next' ? custom.afterXPos : -custom.afterXPos,
+          opacity: 0,
+          transition: {
+            delay: 0,
+            duration: 0.2,
+          },
+        }
+      },
+    }
+
+    return animateVariants
+  }, [slideDirection])
 
   return (
     <section className="projects" id="projects">
@@ -65,29 +150,47 @@ export default function Projects({
             wrapperTag="ul"
             slidesPerView={1}
             spaceBetween={30}
-            breakpoints={{ 850: { slidesPerView: 1.7, spaceBetween: 32 } }}
-            className="projects-swiperModule"
+            breakpoints={{ 850: { slidesPerView: 1.5, spaceBetween: 32 } }}
+            className={classNames('projects-swiperModule', {
+              'projects-swiperModule--dragging': isDraggingSlide,
+            })}
             speed={300}
+            watchSlidesProgress
             autoplay
             loop
             modules={[Autoplay]}
+            onBeforeInit={(swiper) => {
+              previousRealIndexRef.current = swiper.realIndex
+              updateSlideZoom(swiper)
+            }}
+            onProgress={(swiper) => {
+              updateSlideZoom(swiper)
+            }}
+            onSetTranslate={(swiper) => {
+              updateSlideZoom(swiper)
+            }}
+            onTouchStart={() => {
+              setIsDraggingSlide(true)
+            }}
+            onTouchEnd={() => {
+              setIsDraggingSlide(false)
+            }}
             onSlideChange={(swiper) => {
               setCurrentSlideId(swiper.realIndex + 1)
             }}
-            onSlideNextTransitionStart={() => {
-              setSwipeToLeft(true)
+            onSliderMove={(swiper) => {
+              if (swiper.touches.diff === 0) return
+              updateDirection(swiper.touches.diff < 0 ? 'next' : 'prev')
             }}
-            onProgress={(swiper) => {
-              let swipingLeft
-              if (swiper.touches.diff === 0) {
-                swipingLeft = true
-              } else if (swiper.touches.diff <= -140) {
-                swipingLeft = true
-              } else {
-                swipingLeft = false
-              }
+            onSlideChangeTransitionStart={(swiper) => {
+              const nextDirection = getSlideDirection({
+                current: swiper.realIndex,
+                previous: previousRealIndexRef.current,
+                total: totalSlides,
+              })
 
-              setSwipeToLeft(swipingLeft)
+              updateDirection(nextDirection)
+              previousRealIndexRef.current = swiper.realIndex
             }}
           >
             {listOfProjects.map((item, id) => (
@@ -96,84 +199,97 @@ export default function Projects({
                 tag="li"
                 className="projects-swiperSlide"
               >
-                {({ isActive }) => (
-                  <motion.div
-                    className={classNames('projects-swiperContentWrapper', {
-                      'projects-swiperContentWrapper--active': isActive,
-                    })}
-                    onClick={() => {
-                      if (isActive) {
-                        handleClick(true)
-                        handleUpdatePopupData(id)
-                      }
-                    }}
-                    whileHover={
-                      isActive
-                        ? {
-                            cursor: 'pointer',
-                            scale: 0.995,
-                            transition: { duration: 0.3 },
+                {({ isActive }) =>
+                  (() => {
+                    const tagItems = textToArray(item.tags)
+
+                    return (
+                      <motion.div
+                        className={classNames('projects-swiperContentWrapper', {
+                          'projects-swiperContentWrapper--active': isActive,
+                        })}
+                        onClick={() => {
+                          if (isActive) {
+                            handleClick(true)
+                            handleUpdatePopupData(id)
                           }
-                        : undefined
-                    }
-                  >
-                    <motion.div
-                      className="projects-swiperThumbnail"
-                      style={{ backgroundImage: `url(${item.thumbnail.url})` }}
-                      variants={{
-                        active: {
-                          paddingTop: `${(415 / 622) * 100}%`,
-                          filter: 'blur(0)',
-                        },
-                        inactive: {
-                          paddingTop: `${(470 / 622) * 100}%`,
-                          filter: 'blur(1px)',
-                        },
-                      }}
-                      animate={isActive ? 'active' : 'inactive'}
-                    />
-                    <div className="projects-swiperTextWrapper">
-                      <motion.h3
-                        className="projects-swiperTitle"
-                        animate={isActive ? 'show' : 'hide'}
-                        variants={memoVariants}
-                        custom={{
-                          idx: 0,
-                          afterXPos: 25,
                         }}
+                        whileHover={
+                          isActive
+                            ? {
+                                cursor: 'pointer',
+                                scale: 0.995,
+                                transition: { duration: 0.3 },
+                              }
+                            : undefined
+                        }
                       >
-                        {item.title}
-                      </motion.h3>
-                      <motion.span
-                        className="projects-swiperDate"
-                        animate={isActive ? 'show' : 'hide'}
-                        variants={memoVariants}
-                        custom={{
-                          idx: 1,
-                          afterXPos: 45,
-                        }}
-                      >
-                        {item.date}
-                      </motion.span>
-                      <ul className="projects-swiperTags">
-                        {textToArray(item.tags).map((tagText, idx) => (
-                          <motion.li
-                            className="projects-swiperTag"
-                            key={tagText}
+                        <motion.div
+                          className="projects-swiperThumbnail"
+                          style={{
+                            backgroundImage: `url(${item.thumbnail.url})`,
+                            paddingTop: `${INACTIVE_THUMBNAIL_PADDING_TOP}%`,
+                          }}
+                          variants={{
+                            active: {
+                              filter: 'blur(0)',
+                            },
+                            inactive: {
+                              filter: 'blur(1px)',
+                            },
+                          }}
+                          animate={isActive ? 'active' : 'inactive'}
+                        />
+                        <div className="projects-swiperTextWrapper">
+                          <motion.h3
+                            key={`title-${item.title}-${directionAnimationVersion}`}
+                            className="projects-swiperTitle"
+                            initial="hide"
                             animate={isActive ? 'show' : 'hide'}
                             variants={memoVariants}
                             custom={{
-                              idx,
-                              afterXPos: 55,
+                              idx: 0,
+                              afterXPos: 25,
                             }}
                           >
-                            <Tag text={tagText} />
-                          </motion.li>
-                        ))}
-                      </ul>
-                    </div>
-                  </motion.div>
-                )}
+                            {item.title}
+                          </motion.h3>
+                          <motion.span
+                            key={`date-${item.title}-${directionAnimationVersion}`}
+                            className="projects-swiperDate"
+                            initial="hide"
+                            animate={isActive ? 'show' : 'hide'}
+                            variants={memoVariants}
+                            custom={{
+                              idx: 1,
+                              afterXPos: 45,
+                            }}
+                          >
+                            {item.date}
+                          </motion.span>
+                          <ul className="projects-swiperTags">
+                            {tagItems.map((tagText, idx) => (
+                              <motion.li
+                                className="projects-swiperTag"
+                                key={`${tagText}-${directionAnimationVersion}`}
+                                initial="hide"
+                                animate={isActive ? 'show' : 'hide'}
+                                variants={memoTagVariants}
+                                custom={{
+                                  idx,
+                                  total: tagItems.length,
+                                  afterXPos: 90,
+                                }}
+                              >
+                                <Tag text={tagText} />
+                              </motion.li>
+                            ))}
+                          </ul>
+                        </div>
+                      </motion.div>
+                    )
+                  })()
+                }
               </SwiperSlide>
             ))}
           </Swiper>
