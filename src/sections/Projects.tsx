@@ -1,11 +1,6 @@
-// Import Swiper styles
-import 'swiper/css'
-
 import classNames from 'classnames'
 import { motion } from 'framer-motion'
-import { useMemo, useState } from 'react'
-import { Autoplay } from 'swiper/modules'
-import { Swiper, SwiperSlide } from 'swiper/react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import Tag from '@/elements/Tag'
 import { SectionProject } from '@/gql/graphql'
@@ -22,16 +17,143 @@ type CustomFramerProps = {
   afterXPos: number
 }
 
+type CustomTagFramerProps = {
+  idx: number
+  total: number
+  afterXPos: number
+}
+
+const THUMBNAIL_PADDING_TOP = 66.7203
+const MAX_VISIBLE_STACK = 4
+const STACK_RANGE = {
+  xStart: -110,
+  xEnd: -34,
+  yStart: 0,
+  yEnd: -130,
+  scaleStart: 0.7,
+  scaleStep: 0.01,
+  skewStart: 1.2,
+  skewStep: -1.2,
+} as const
+const DRAG_SWIPE_THRESHOLD = 70
+const AUTOPLAY_DELAY = 420000
+const LAST_SENTINEL_SCALE_DELTA = 0.03
+
+function createStackLayout(slotIndex: number, visibleCount: number) {
+  const lastSlot = Math.max(1, visibleCount - 1)
+  const slotProgress = slotIndex / lastSlot
+
+  return {
+    x:
+      STACK_RANGE.xStart +
+      (STACK_RANGE.xEnd - STACK_RANGE.xStart) * slotProgress,
+    y:
+      STACK_RANGE.yStart +
+      (STACK_RANGE.yEnd - STACK_RANGE.yStart) * slotProgress,
+    scale: STACK_RANGE.scaleStart + STACK_RANGE.scaleStep * slotIndex,
+    skewY: STACK_RANGE.skewStart + STACK_RANGE.skewStep * slotIndex,
+    zIndex: MAX_VISIBLE_STACK - slotIndex,
+  }
+}
+
+function createTrackLayout(trackSlot: number, visibleCount: number) {
+  if (trackSlot < 0) {
+    const frontLayout = createStackLayout(0, visibleCount)
+
+    return {
+      ...frontLayout,
+      x: frontLayout.x - 44,
+      y: frontLayout.y + 12,
+      scale: 0.5,
+      skewY: frontLayout.skewY + 0.5,
+      opacity: 0,
+    }
+  }
+
+  if (trackSlot > visibleCount - 1) {
+    const backLayout = createStackLayout(visibleCount - 1, visibleCount)
+
+    return {
+      ...backLayout,
+      x: backLayout.x + 24,
+      y: backLayout.y - 22,
+      scale: Math.max(0.1, backLayout.scale - LAST_SENTINEL_SCALE_DELTA),
+      skewY: backLayout.skewY - 0.4,
+      zIndex: 0,
+      opacity: 0,
+    }
+  }
+
+  return {
+    ...createStackLayout(trackSlot, visibleCount),
+    opacity: 1,
+  }
+}
+
+function normalizeIndex(index: number, total: number) {
+  if (total === 0) return 0
+  return (index + total) % total
+}
+
 export default function Projects({
   handleClick,
   componentData,
   handleUpdatePopupData,
 }: ProjectsProps) {
-  const [currentSlideId, setCurrentSlideId] = useState(0)
-  const [swipeToLeft, setSwipeToLeft] = useState<boolean | undefined>(undefined)
+  const [windowBaseIndex, setWindowBaseIndex] = useState(0)
+  const [isCarouselPaused, setIsCarouselPaused] = useState(false)
+  const [slideDirection, setSlideDirection] = useState<'next' | 'prev'>('next')
+  const [directionAnimationVersion, setDirectionAnimationVersion] = useState(0)
 
   const { title, listOfProjects } = componentData
   const totalSlides = listOfProjects.length
+  const visibleCount = Math.min(totalSlides, MAX_VISIBLE_STACK)
+  const trackLength = totalSlides * 3
+
+  useEffect(() => {
+    if (totalSlides === 0) {
+      setWindowBaseIndex(0)
+      return
+    }
+
+    setWindowBaseIndex(totalSlides)
+  }, [totalSlides])
+
+  const updateDirection = useCallback(
+    (nextDirection: 'next' | 'prev') => {
+      if (slideDirection === nextDirection) return
+
+      setSlideDirection(nextDirection)
+      setDirectionAnimationVersion((prevValue) => prevValue + 1)
+    },
+    [slideDirection]
+  )
+
+  const moveCarousel = useCallback(
+    (nextDirection: 'next' | 'prev') => {
+      if (totalSlides <= 1) return
+
+      updateDirection(nextDirection)
+
+      setWindowBaseIndex((prevBaseIndex) =>
+        normalizeIndex(
+          nextDirection === 'next' ? prevBaseIndex + 1 : prevBaseIndex - 1,
+          trackLength
+        )
+      )
+    },
+    [trackLength, totalSlides, updateDirection]
+  )
+
+  useEffect(() => {
+    if (isCarouselPaused || totalSlides <= 1) return
+
+    const autoplayInterval = setInterval(() => {
+      moveCarousel('next')
+    }, AUTOPLAY_DELAY)
+
+    return () => clearInterval(autoplayInterval)
+  }, [isCarouselPaused, moveCarousel, totalSlides])
 
   const memoVariants = useMemo(() => {
     const animateVariants = {
@@ -47,64 +169,146 @@ export default function Projects({
       },
       hide: (custom: CustomFramerProps) => {
         return {
-          x: swipeToLeft ? custom.afterXPos : -custom.afterXPos,
+          x: slideDirection === 'next' ? custom.afterXPos : -custom.afterXPos,
           opacity: 0,
         }
       },
     }
 
     return animateVariants
-  }, [swipeToLeft])
+  }, [slideDirection])
+
+  const memoTagVariants = useMemo(() => {
+    const animateVariants = {
+      show: (custom: CustomTagFramerProps) => {
+        return {
+          x: 0,
+          opacity: 1,
+          transition: {
+            delay: 0.16 + 0.06 * custom.idx,
+            duration: 0.3,
+          },
+        }
+      },
+      hide: (custom: CustomTagFramerProps) => {
+        return {
+          x: slideDirection === 'next' ? custom.afterXPos : -custom.afterXPos,
+          opacity: 0,
+          transition: {
+            delay: 0,
+            duration: 0.2,
+          },
+        }
+      },
+    }
+
+    return animateVariants
+  }, [slideDirection])
+
+  const trackSlides = useMemo(() => {
+    if (totalSlides === 0 || visibleCount === 0) return []
+
+    return Array.from({ length: trackLength }, (_, trackIndex) => {
+      const sourceIndex = normalizeIndex(trackIndex, totalSlides)
+      const rawOffset = normalizeIndex(
+        trackIndex - windowBaseIndex,
+        trackLength
+      )
+      const signedOffset =
+        rawOffset > trackLength / 2 ? rawOffset - trackLength : rawOffset
+
+      const trackSlot =
+        signedOffset < 0
+          ? -1
+          : signedOffset >= visibleCount
+            ? visibleCount
+            : signedOffset
+
+      return {
+        item: listOfProjects[sourceIndex],
+        sourceIndex,
+        trackSlot,
+        trackIndex,
+        key: `${trackIndex}`,
+      }
+    })
+  }, [listOfProjects, totalSlides, trackLength, visibleCount, windowBaseIndex])
+
+  const currentSlideCounter =
+    totalSlides > 0 ? normalizeIndex(windowBaseIndex, totalSlides) + 1 : 0
 
   return (
     <section className="projects" id="projects">
       <div className="projects-wrapper">
         <h3 className="projects-title">{title}</h3>
-        <div className="projects-swiperWrapper">
-          <Swiper
-            wrapperTag="ul"
-            slidesPerView={1}
-            spaceBetween={30}
-            breakpoints={{ 850: { slidesPerView: 1.7, spaceBetween: 32 } }}
-            className="projects-swiperModule"
-            speed={300}
-            autoplay
-            loop
-            modules={[Autoplay]}
-            onSlideChange={(swiper) => {
-              setCurrentSlideId(swiper.realIndex + 1)
-            }}
-            onSlideNextTransitionStart={() => {
-              setSwipeToLeft(true)
-            }}
-            onProgress={(swiper) => {
-              let swipingLeft
-              if (swiper.touches.diff === 0) {
-                swipingLeft = true
-              } else if (swiper.touches.diff <= -140) {
-                swipingLeft = true
-              } else {
-                swipingLeft = false
-              }
+        <div
+          className="projects-carouselWrapper"
+          onMouseEnter={() => setIsCarouselPaused(true)}
+          onMouseLeave={() => setIsCarouselPaused(false)}
+        >
+          {trackSlides.map(
+            ({ item, sourceIndex, trackSlot, key, trackIndex }) => {
+              const isActive = trackSlot === 0
+              const stackLayout = createTrackLayout(trackSlot, visibleCount)
+              const tagItems = textToArray(item.tags)
 
-              setSwipeToLeft(swipingLeft)
-            }}
-          >
-            {listOfProjects.map((item, id) => (
-              <SwiperSlide
-                key={item.title}
-                tag="li"
-                className="projects-swiperSlide"
-              >
-                {({ isActive }) => (
+              return (
+                <motion.div
+                  key={key}
+                  className="projects-carouselSlide"
+                  data-track-index={trackIndex}
+                  animate={{
+                    x: stackLayout.x,
+                    y: stackLayout.y,
+                    scale: stackLayout.scale,
+                    skewY: stackLayout.skewY,
+                    opacity: stackLayout.opacity,
+                  }}
+                  transition={{ duration: 0.34, ease: 'easeOut' }}
+                  style={{
+                    zIndex: stackLayout.zIndex,
+                    pointerEvents: isActive ? 'auto' : 'none',
+                  }}
+                >
                   <motion.div
-                    className={classNames('projects-swiperContentWrapper', {
-                      'projects-swiperContentWrapper--active': isActive,
+                    className={classNames('projects-carouselContentWrapper', {
+                      'projects-carouselContentWrapper--active': isActive,
                     })}
+                    drag={isActive ? true : false}
+                    dragElastic={0.08}
+                    dragSnapToOrigin
+                    dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
+                    onDragEnd={(_, info) => {
+                      const horizontalOffset = info.offset.x
+                      const verticalOffset = info.offset.y
+
+                      if (
+                        Math.abs(horizontalOffset) >= Math.abs(verticalOffset)
+                      ) {
+                        if (horizontalOffset >= DRAG_SWIPE_THRESHOLD) {
+                          moveCarousel('prev')
+                          return
+                        }
+
+                        if (horizontalOffset <= -DRAG_SWIPE_THRESHOLD) {
+                          moveCarousel('next')
+                        }
+                        return
+                      }
+
+                      if (verticalOffset <= -DRAG_SWIPE_THRESHOLD) {
+                        moveCarousel('prev')
+                        return
+                      }
+
+                      if (verticalOffset >= DRAG_SWIPE_THRESHOLD) {
+                        moveCarousel('next')
+                      }
+                    }}
                     onClick={() => {
                       if (isActive) {
                         handleClick(true)
-                        handleUpdatePopupData(id)
+                        handleUpdatePopupData(sourceIndex)
                       }
                     }}
                     whileHover={
@@ -118,23 +322,26 @@ export default function Projects({
                     }
                   >
                     <motion.div
-                      className="projects-swiperThumbnail"
-                      style={{ backgroundImage: `url(${item.thumbnail.url})` }}
+                      className="projects-carouselThumbnail"
+                      style={{
+                        backgroundImage: `url(${item.thumbnail.url})`,
+                        paddingTop: `${THUMBNAIL_PADDING_TOP}%`,
+                      }}
                       variants={{
                         active: {
-                          paddingTop: `${(415 / 622) * 100}%`,
                           filter: 'blur(0)',
                         },
                         inactive: {
-                          paddingTop: `${(470 / 622) * 100}%`,
                           filter: 'blur(1px)',
                         },
                       }}
                       animate={isActive ? 'active' : 'inactive'}
                     />
-                    <div className="projects-swiperTextWrapper">
+                    <div className="projects-carouselTextWrapper">
                       <motion.h3
-                        className="projects-swiperTitle"
+                        key={`title-${item.title}-${directionAnimationVersion}`}
+                        className="projects-carouselTitle"
+                        initial="hide"
                         animate={isActive ? 'show' : 'hide'}
                         variants={memoVariants}
                         custom={{
@@ -145,7 +352,9 @@ export default function Projects({
                         {item.title}
                       </motion.h3>
                       <motion.span
-                        className="projects-swiperDate"
+                        key={`date-${item.title}-${directionAnimationVersion}`}
+                        className="projects-carouselDate"
+                        initial="hide"
                         animate={isActive ? 'show' : 'hide'}
                         variants={memoVariants}
                         custom={{
@@ -155,16 +364,18 @@ export default function Projects({
                       >
                         {item.date}
                       </motion.span>
-                      <ul className="projects-swiperTags">
-                        {textToArray(item.tags).map((tagText, idx) => (
+                      <ul className="projects-carouselTags">
+                        {tagItems.map((tagText, idx) => (
                           <motion.li
-                            className="projects-swiperTag"
-                            key={tagText}
+                            className="projects-carouselTag"
+                            key={`${tagText}-${directionAnimationVersion}`}
+                            initial="hide"
                             animate={isActive ? 'show' : 'hide'}
-                            variants={memoVariants}
+                            variants={memoTagVariants}
                             custom={{
                               idx,
-                              afterXPos: 55,
+                              total: tagItems.length,
+                              afterXPos: 90,
                             }}
                           >
                             <Tag text={tagText} />
@@ -173,15 +384,15 @@ export default function Projects({
                       </ul>
                     </div>
                   </motion.div>
-                )}
-              </SwiperSlide>
-            ))}
-          </Swiper>
+                </motion.div>
+              )
+            }
+          )}
         </div>
 
         <div className="projects-counter">
           <span className="projects-counterText">
-            {currentSlideId}/{totalSlides}
+            {currentSlideCounter}/{totalSlides}
           </span>
         </div>
       </div>

@@ -15,30 +15,39 @@ $css: '.projects';
     text-transform: uppercase;
   }
 
-  &-swiper {
+  &-carousel {
     &Wrapper {
+      display: grid;
       position: relative;
       margin-right: -15px;
       margin-left: -15px;
-      overflow-x: hidden;
-    }
-
-    &Module {
       padding-right: 15px !important;
       padding-left: 15px !important;
+      perspective: 1080px;
+      perspective-origin: 0% 50%;
+
+      @include mobile-view {
+        min-height: 280px;
+      }
+
+      @include desktop-view {
+        min-height: 560px;
+      }
+    }
+
+    &Slide {
+      grid-area: 1 / 1;
     }
 
     &ContentWrapper {
       @extend %inline-flex, %flex-start-column;
 
       width: 100%;
+      transform-origin: left center;
       transition: 0.3s $transition-style opacity;
-      opacity: $opacity-40;
+      opacity: 1;
       cursor: grab;
-
-      &--active {
-        opacity: $opacity-100;
-      }
+      will-change: opacity;
     }
 
     &TextWrapper {
@@ -50,7 +59,7 @@ $css: '.projects';
         margin-top: 2.5px;
       }
 
-      #{$css}-swiperContentWrapper--active & {
+      #{$css}-carouselContentWrapper--active & {
         visibility: visible;
       }
     }
@@ -59,10 +68,14 @@ $css: '.projects';
       @extend %cover-background-image;
 
       width: 100%;
+      transition:
+        0.32s cubic-bezier(0.22, 1, 0.36, 1) padding-top,
+        0.3s $transition-style filter;
       border-radius: 12px;
+      will-change: padding-top, filter;
 
       @include mobile-view {
-        padding-top: (192 / 278 * 100%) !important;
+        padding-top: (192 / 278 * 100%);
       }
       @include desktop-view {
         background-position: top-left;
