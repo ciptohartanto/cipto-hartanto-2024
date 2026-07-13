@@ -147,6 +147,8 @@ export default function Projects({
   componentData,
   handleUpdatePopupData,
 }: ProjectsProps) {
+  const [windowBaseIndex, setWindowBaseIndex] = useState(0)
+  const [isCarouselPaused, setIsCarouselPaused] = useState(false)
   const [currentSlideId, setCurrentSlideId] = useState(1)
   const [isDraggingSlide, setIsDraggingSlide] = useState(false)
   const [slideDirection, setSlideDirection] = useState<'next' | 'prev'>('next')
@@ -155,13 +157,53 @@ export default function Projects({
 
   const { title, listOfProjects } = componentData
   const totalSlides = listOfProjects.length
+  const visibleCount = Math.min(totalSlides, MAX_VISIBLE_STACK)
+  const trackLength = totalSlides * 3
 
-  const updateDirection = (nextDirection: 'next' | 'prev') => {
-    if (slideDirection === nextDirection) return
+  useEffect(() => {
+    if (totalSlides === 0) {
+      setWindowBaseIndex(0)
+      return
+    }
 
-    setSlideDirection(nextDirection)
-    setDirectionAnimationVersion((prevValue) => prevValue + 1)
-  }
+    setWindowBaseIndex(totalSlides)
+  }, [totalSlides])
+
+  const updateDirection = useCallback(
+    (nextDirection: 'next' | 'prev') => {
+      if (slideDirection === nextDirection) return
+
+      setSlideDirection(nextDirection)
+      setDirectionAnimationVersion((prevValue) => prevValue + 1)
+    },
+    [slideDirection]
+  )
+
+  const moveCarousel = useCallback(
+    (nextDirection: 'next' | 'prev') => {
+      if (totalSlides <= 1) return
+
+      updateDirection(nextDirection)
+
+      setWindowBaseIndex((prevBaseIndex) =>
+        normalizeIndex(
+          nextDirection === 'next' ? prevBaseIndex + 1 : prevBaseIndex - 1,
+          trackLength
+        )
+      )
+    },
+    [trackLength, totalSlides, updateDirection]
+  )
+
+  useEffect(() => {
+    if (isCarouselPaused || totalSlides <= 1) return
+
+    const autoplayInterval = setInterval(() => {
+      moveCarousel('next')
+    }, AUTOPLAY_DELAY)
+
+    return () => clearInterval(autoplayInterval)
+  }, [isCarouselPaused, moveCarousel, totalSlides])
 
   const memoVariants = useMemo(() => {
     const animateVariants = {
@@ -212,6 +254,38 @@ export default function Projects({
 
     return animateVariants
   }, [slideDirection])
+
+  const trackSlides = useMemo(() => {
+    if (totalSlides === 0 || visibleCount === 0) return []
+
+    return Array.from({ length: trackLength }, (_, trackIndex) => {
+      const sourceIndex = normalizeIndex(trackIndex, totalSlides)
+      const rawOffset = normalizeIndex(
+        trackIndex - windowBaseIndex,
+        trackLength
+      )
+      const signedOffset =
+        rawOffset > trackLength / 2 ? rawOffset - trackLength : rawOffset
+
+      const trackSlot =
+        signedOffset < 0
+          ? -1
+          : signedOffset >= visibleCount
+            ? visibleCount
+            : signedOffset
+
+      return {
+        item: listOfProjects[sourceIndex],
+        sourceIndex,
+        trackSlot,
+        trackIndex,
+        key: `${trackIndex}`,
+      }
+    })
+  }, [listOfProjects, totalSlides, trackLength, visibleCount, windowBaseIndex])
+
+  const currentSlideCounter =
+    totalSlides > 0 ? normalizeIndex(windowBaseIndex, totalSlides) + 1 : 0
 
   return (
     <section className="projects" id="projects">
