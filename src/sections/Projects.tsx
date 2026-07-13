@@ -41,11 +41,15 @@ const LAST_SENTINEL_SCALE_DELTA = 0.03
 
 function createStackLayout(slotIndex: number, visibleCount: number) {
   const lastSlot = Math.max(1, visibleCount - 1)
-  const progress = slotIndex / lastSlot
+  const slotProgress = slotIndex / lastSlot
 
   return {
-    x: STACK_RANGE.xStart + (STACK_RANGE.xEnd - STACK_RANGE.xStart) * progress,
-    y: STACK_RANGE.yStart + (STACK_RANGE.yEnd - STACK_RANGE.yStart) * progress,
+    x:
+      STACK_RANGE.xStart +
+      (STACK_RANGE.xEnd - STACK_RANGE.xStart) * slotProgress,
+    y:
+      STACK_RANGE.yStart +
+      (STACK_RANGE.yEnd - STACK_RANGE.yStart) * slotProgress,
     scale: STACK_RANGE.scaleStart + STACK_RANGE.scaleStep * slotIndex,
     skewY: STACK_RANGE.skewStart + STACK_RANGE.skewStep * slotIndex,
     zIndex: MAX_VISIBLE_STACK - slotIndex,
