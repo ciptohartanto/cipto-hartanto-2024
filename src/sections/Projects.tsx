@@ -241,155 +241,153 @@ export default function Projects({
     <section className="projects" id="projects">
       <div className="projects-wrapper">
         <h3 className="projects-title">{title}</h3>
-        <div className="projects-swiperWrapper">
-          <div
-            className="projects-swiperModule"
-            onMouseEnter={() => setIsCarouselPaused(true)}
-            onMouseLeave={() => setIsCarouselPaused(false)}
-          >
-            {trackSlides.map(
-              ({ item, sourceIndex, trackSlot, key, trackIndex }) => {
-                const isActive = trackSlot === 0
-                const stackLayout = createTrackLayout(trackSlot, visibleCount)
-                const tagItems = textToArray(item.tags)
+        <div
+          className="projects-carouselWrapper"
+          onMouseEnter={() => setIsCarouselPaused(true)}
+          onMouseLeave={() => setIsCarouselPaused(false)}
+        >
+          {trackSlides.map(
+            ({ item, sourceIndex, trackSlot, key, trackIndex }) => {
+              const isActive = trackSlot === 0
+              const stackLayout = createTrackLayout(trackSlot, visibleCount)
+              const tagItems = textToArray(item.tags)
 
-                return (
+              return (
+                <motion.div
+                  key={key}
+                  className="projects-carouselSlide"
+                  data-track-index={trackIndex}
+                  animate={{
+                    x: stackLayout.x,
+                    y: stackLayout.y,
+                    scale: stackLayout.scale,
+                    skewY: stackLayout.skewY,
+                    opacity: stackLayout.opacity,
+                  }}
+                  transition={{ duration: 0.34, ease: 'easeOut' }}
+                  style={{
+                    zIndex: stackLayout.zIndex,
+                    pointerEvents: isActive ? 'auto' : 'none',
+                  }}
+                >
                   <motion.div
-                    key={key}
-                    className="projects-swiperSlide"
-                    data-track-index={trackIndex}
-                    animate={{
-                      x: stackLayout.x,
-                      y: stackLayout.y,
-                      scale: stackLayout.scale,
-                      skewY: stackLayout.skewY,
-                      opacity: stackLayout.opacity,
-                    }}
-                    transition={{ duration: 0.34, ease: 'easeOut' }}
-                    style={{
-                      zIndex: stackLayout.zIndex,
-                      pointerEvents: isActive ? 'auto' : 'none',
-                    }}
-                  >
-                    <motion.div
-                      className={classNames('projects-swiperContentWrapper', {
-                        'projects-swiperContentWrapper--active': isActive,
-                      })}
-                      drag={isActive ? true : false}
-                      dragElastic={0.08}
-                      dragSnapToOrigin
-                      dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-                      onDragEnd={(_, info) => {
-                        const horizontalOffset = info.offset.x
-                        const verticalOffset = info.offset.y
+                    className={classNames('projects-carouselContentWrapper', {
+                      'projects-carouselContentWrapper--active': isActive,
+                    })}
+                    drag={isActive ? true : false}
+                    dragElastic={0.08}
+                    dragSnapToOrigin
+                    dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
+                    onDragEnd={(_, info) => {
+                      const horizontalOffset = info.offset.x
+                      const verticalOffset = info.offset.y
 
-                        if (
-                          Math.abs(horizontalOffset) >= Math.abs(verticalOffset)
-                        ) {
-                          if (horizontalOffset >= DRAG_SWIPE_THRESHOLD) {
-                            moveCarousel('prev')
-                            return
-                          }
-
-                          if (horizontalOffset <= -DRAG_SWIPE_THRESHOLD) {
-                            moveCarousel('next')
-                          }
-                          return
-                        }
-
-                        if (verticalOffset <= -DRAG_SWIPE_THRESHOLD) {
+                      if (
+                        Math.abs(horizontalOffset) >= Math.abs(verticalOffset)
+                      ) {
+                        if (horizontalOffset >= DRAG_SWIPE_THRESHOLD) {
                           moveCarousel('prev')
                           return
                         }
 
-                        if (verticalOffset >= DRAG_SWIPE_THRESHOLD) {
+                        if (horizontalOffset <= -DRAG_SWIPE_THRESHOLD) {
                           moveCarousel('next')
                         }
-                      }}
-                      onClick={() => {
-                        if (isActive) {
-                          handleClick(true)
-                          handleUpdatePopupData(sourceIndex)
-                        }
-                      }}
-                      whileHover={
-                        isActive
-                          ? {
-                              cursor: 'pointer',
-                              scale: 0.995,
-                              transition: { duration: 0.3 },
-                            }
-                          : undefined
+                        return
                       }
-                    >
-                      <motion.div
-                        className="projects-swiperThumbnail"
-                        style={{
-                          backgroundImage: `url(${item.thumbnail.url})`,
-                          paddingTop: `${THUMBNAIL_PADDING_TOP}%`,
+
+                      if (verticalOffset <= -DRAG_SWIPE_THRESHOLD) {
+                        moveCarousel('prev')
+                        return
+                      }
+
+                      if (verticalOffset >= DRAG_SWIPE_THRESHOLD) {
+                        moveCarousel('next')
+                      }
+                    }}
+                    onClick={() => {
+                      if (isActive) {
+                        handleClick(true)
+                        handleUpdatePopupData(sourceIndex)
+                      }
+                    }}
+                    whileHover={
+                      isActive
+                        ? {
+                            cursor: 'pointer',
+                            scale: 0.995,
+                            transition: { duration: 0.3 },
+                          }
+                        : undefined
+                    }
+                  >
+                    <motion.div
+                      className="projects-carouselThumbnail"
+                      style={{
+                        backgroundImage: `url(${item.thumbnail.url})`,
+                        paddingTop: `${THUMBNAIL_PADDING_TOP}%`,
+                      }}
+                      variants={{
+                        active: {
+                          filter: 'blur(0)',
+                        },
+                        inactive: {
+                          filter: 'blur(1px)',
+                        },
+                      }}
+                      animate={isActive ? 'active' : 'inactive'}
+                    />
+                    <div className="projects-carouselTextWrapper">
+                      <motion.h3
+                        key={`title-${item.title}-${directionAnimationVersion}`}
+                        className="projects-carouselTitle"
+                        initial="hide"
+                        animate={isActive ? 'show' : 'hide'}
+                        variants={memoVariants}
+                        custom={{
+                          idx: 0,
+                          afterXPos: 25,
                         }}
-                        variants={{
-                          active: {
-                            filter: 'blur(0)',
-                          },
-                          inactive: {
-                            filter: 'blur(1px)',
-                          },
+                      >
+                        {item.title}
+                      </motion.h3>
+                      <motion.span
+                        key={`date-${item.title}-${directionAnimationVersion}`}
+                        className="projects-carouselDate"
+                        initial="hide"
+                        animate={isActive ? 'show' : 'hide'}
+                        variants={memoVariants}
+                        custom={{
+                          idx: 1,
+                          afterXPos: 45,
                         }}
-                        animate={isActive ? 'active' : 'inactive'}
-                      />
-                      <div className="projects-swiperTextWrapper">
-                        <motion.h3
-                          key={`title-${item.title}-${directionAnimationVersion}`}
-                          className="projects-swiperTitle"
-                          initial="hide"
-                          animate={isActive ? 'show' : 'hide'}
-                          variants={memoVariants}
-                          custom={{
-                            idx: 0,
-                            afterXPos: 25,
-                          }}
-                        >
-                          {item.title}
-                        </motion.h3>
-                        <motion.span
-                          key={`date-${item.title}-${directionAnimationVersion}`}
-                          className="projects-swiperDate"
-                          initial="hide"
-                          animate={isActive ? 'show' : 'hide'}
-                          variants={memoVariants}
-                          custom={{
-                            idx: 1,
-                            afterXPos: 45,
-                          }}
-                        >
-                          {item.date}
-                        </motion.span>
-                        <ul className="projects-swiperTags">
-                          {tagItems.map((tagText, idx) => (
-                            <motion.li
-                              className="projects-swiperTag"
-                              key={`${tagText}-${directionAnimationVersion}`}
-                              initial="hide"
-                              animate={isActive ? 'show' : 'hide'}
-                              variants={memoTagVariants}
-                              custom={{
-                                idx,
-                                total: tagItems.length,
-                                afterXPos: 90,
-                              }}
-                            >
-                              <Tag text={tagText} />
-                            </motion.li>
-                          ))}
-                        </ul>
-                      </div>
-                    </motion.div>
+                      >
+                        {item.date}
+                      </motion.span>
+                      <ul className="projects-carouselTags">
+                        {tagItems.map((tagText, idx) => (
+                          <motion.li
+                            className="projects-carouselTag"
+                            key={`${tagText}-${directionAnimationVersion}`}
+                            initial="hide"
+                            animate={isActive ? 'show' : 'hide'}
+                            variants={memoTagVariants}
+                            custom={{
+                              idx,
+                              total: tagItems.length,
+                              afterXPos: 90,
+                            }}
+                          >
+                            <Tag text={tagText} />
+                          </motion.li>
+                        ))}
+                      </ul>
+                    </div>
                   </motion.div>
-                )
-              }
-            )}
-          </div>
+                </motion.div>
+              )
+            }
+          )}
         </div>
 
         <div className="projects-counter">

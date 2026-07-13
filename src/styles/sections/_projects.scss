@@ -15,20 +15,16 @@ $css: '.projects';
     text-transform: uppercase;
   }
 
-  &-swiper {
+  &-carousel {
     &Wrapper {
+      display: grid;
       position: relative;
       margin-right: -15px;
       margin-left: -15px;
-      perspective: 1080px;
-      perspective-origin: 0% 50%;
-    }
-
-    &Module {
-      display: grid;
-      position: relative;
       padding-right: 15px !important;
       padding-left: 15px !important;
+      perspective: 1080px;
+      perspective-origin: 0% 50%;
 
       @include mobile-view {
         min-height: 280px;
@@ -63,7 +59,7 @@ $css: '.projects';
         margin-top: 2.5px;
       }
 
-      #{$css}-swiperContentWrapper--active & {
+      #{$css}-carouselContentWrapper--active & {
         visibility: visible;
       }
     }
