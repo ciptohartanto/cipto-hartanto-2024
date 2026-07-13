@@ -275,18 +275,35 @@ export default function Projects({
                       className={classNames('projects-swiperContentWrapper', {
                         'projects-swiperContentWrapper--active': isActive,
                       })}
-                      drag={isActive ? 'x' : false}
+                      drag={isActive ? true : false}
                       dragElastic={0.08}
                       dragSnapToOrigin
-                      dragConstraints={{ left: 0, right: 0 }}
+                      dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
                       onDragEnd={(_, info) => {
-                        if (info.offset.x >= DRAG_SWIPE_THRESHOLD) {
-                          moveCarousel('next')
+                        const horizontalOffset = info.offset.x
+                        const verticalOffset = info.offset.y
+
+                        if (
+                          Math.abs(horizontalOffset) >= Math.abs(verticalOffset)
+                        ) {
+                          if (horizontalOffset >= DRAG_SWIPE_THRESHOLD) {
+                            moveCarousel('prev')
+                            return
+                          }
+
+                          if (horizontalOffset <= -DRAG_SWIPE_THRESHOLD) {
+                            moveCarousel('next')
+                          }
                           return
                         }
 
-                        if (info.offset.x <= -DRAG_SWIPE_THRESHOLD) {
+                        if (verticalOffset <= -DRAG_SWIPE_THRESHOLD) {
                           moveCarousel('prev')
+                          return
+                        }
+
+                        if (verticalOffset >= DRAG_SWIPE_THRESHOLD) {
+                          moveCarousel('next')
                         }
                       }}
                       onClick={() => {
