@@ -3,7 +3,7 @@ import 'swiper/css'
 
 import classNames from 'classnames'
 import { motion } from 'framer-motion'
-import { useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Autoplay } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
@@ -30,6 +30,21 @@ type CustomTagFramerProps = {
 
 const ACTIVE_THUMBNAIL_PADDING_TOP = (415 / 622) * 100
 const INACTIVE_THUMBNAIL_PADDING_TOP = (470 / 622) * 100
+const THUMBNAIL_PADDING_TOP = 66.7203
+const MAX_VISIBLE_STACK = 4
+const STACK_RANGE = {
+  xStart: -150,
+  xEnd: -26,
+  yStart: 0,
+  yEnd: -235,
+  scaleStart: 0.7,
+  scaleStep: 0.01,
+  skewStart: 1.2,
+  skewStep: -1.2,
+} as const
+const DRAG_SWIPE_THRESHOLD = 70
+const AUTOPLAY_DELAY = 420000
+const LAST_SENTINEL_SCALE_DELTA = 0.03
 
 function getSlideDirection({
   current,
@@ -68,6 +83,63 @@ function updateSlideZoom(swiper: {
       thumbnailNode.style.paddingTop = `${paddingTop}%`
     }
   })
+}
+
+function createStackLayout(slotIndex: number, visibleCount: number) {
+  const lastSlot = Math.max(1, visibleCount - 1)
+  const progress = slotIndex / lastSlot
+  const easedProgress = 1 - Math.pow(1 - progress, 1.35)
+
+  return {
+    x:
+      STACK_RANGE.xStart +
+      (STACK_RANGE.xEnd - STACK_RANGE.xStart) * easedProgress,
+    y:
+      STACK_RANGE.yStart +
+      (STACK_RANGE.yEnd - STACK_RANGE.yStart) * easedProgress,
+    scale: STACK_RANGE.scaleStart + STACK_RANGE.scaleStep * slotIndex,
+    skewY: STACK_RANGE.skewStart + STACK_RANGE.skewStep * slotIndex,
+    zIndex: MAX_VISIBLE_STACK - slotIndex,
+  }
+}
+
+function createTrackLayout(trackSlot: number, visibleCount: number) {
+  if (trackSlot < 0) {
+    const frontLayout = createStackLayout(0, visibleCount)
+
+    return {
+      ...frontLayout,
+      x: frontLayout.x - 44,
+      y: frontLayout.y + 12,
+      scale: 0.5,
+      skewY: frontLayout.skewY + 0.5,
+      opacity: 0,
+    }
+  }
+
+  if (trackSlot > visibleCount - 1) {
+    const backLayout = createStackLayout(visibleCount - 1, visibleCount)
+
+    return {
+      ...backLayout,
+      x: backLayout.x + 24,
+      y: backLayout.y - 22,
+      scale: Math.max(0.1, backLayout.scale - LAST_SENTINEL_SCALE_DELTA),
+      skewY: backLayout.skewY - 0.4,
+      zIndex: 0,
+      opacity: 0,
+    }
+  }
+
+  return {
+    ...createStackLayout(trackSlot, visibleCount),
+    opacity: 1,
+  }
+}
+
+function normalizeIndex(index: number, total: number) {
+  if (total === 0) return 0
+  return (index + total) % total
 }
 
 export default function Projects({
