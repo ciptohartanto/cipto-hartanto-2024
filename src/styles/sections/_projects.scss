@@ -47,9 +47,11 @@ $css: '.projects';
       @extend %inline-flex, %flex-start-column;
 
       width: 100%;
+      transform-origin: left center;
       transition: 0.3s $transition-style opacity;
-      opacity: calc(0.2 + var(--projects-slide-focus, 0) * 0.3);
+      opacity: 1;
       cursor: grab;
+      will-change: opacity;
     }
 
     &TextWrapper {
@@ -70,13 +72,11 @@ $css: '.projects';
       @extend %cover-background-image;
 
       width: 100%;
-      transition: 0.32s cubic-bezier(0.22, 1, 0.36, 1) padding-top;
+      transition:
+        0.32s cubic-bezier(0.22, 1, 0.36, 1) padding-top,
+        0.3s $transition-style filter;
       border-radius: 12px;
-      will-change: padding-top;
-
-      #{$css}-swiperModule--dragging & {
-        transition: none;
-      }
+      will-change: padding-top, filter;
 
       @include mobile-view {
         padding-top: (192 / 278 * 100%);
