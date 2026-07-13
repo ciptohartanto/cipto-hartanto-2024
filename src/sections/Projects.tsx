@@ -27,9 +27,9 @@ const THUMBNAIL_PADDING_TOP = 66.7203
 const MAX_VISIBLE_STACK = 4
 const STACK_RANGE = {
   xStart: -150,
-  xEnd: -26,
+  xEnd: -54,
   yStart: 0,
-  yEnd: -235,
+  yEnd: -180,
   scaleStart: 0.7,
   scaleStep: 0.01,
   skewStart: 1.2,
