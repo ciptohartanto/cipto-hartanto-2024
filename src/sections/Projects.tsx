@@ -29,7 +29,7 @@ const STACK_RANGE = {
   xStart: -110,
   xEnd: -34,
   yStart: 0,
-  yEnd: -180,
+  yEnd: -130,
   scaleStart: 0.7,
   scaleStep: 0.01,
   skewStart: 1.2,
