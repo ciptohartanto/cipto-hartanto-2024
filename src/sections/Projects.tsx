@@ -26,8 +26,8 @@ type CustomTagFramerProps = {
 const THUMBNAIL_PADDING_TOP = 66.7203
 const MAX_VISIBLE_STACK = 4
 const STACK_RANGE = {
-  xStart: -150,
-  xEnd: -54,
+  xStart: -110,
+  xEnd: -34,
   yStart: 0,
   yEnd: -180,
   scaleStart: 0.7,
